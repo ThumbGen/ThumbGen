@@ -1,3 +1,6 @@
+NOTE: This repository exists only for historical reasons :) It is not maintained anymore and contains ancient code...
+
+
 ThumbGen is loaded with powerful features and designed to make your media player look different. It can be used with virtually any device that has a basic GUI and is able to display images. With embedded scrapers, a powerful rendering engine, fully customizable output, flexible layouts and a lot of extra features ThumbGen is a must have for any media player owner.
 
 Key Features
@@ -40,31 +43,31 @@ Key Features
 
  
 
-amazon.com/de/fr/ca/co.uk
-TheTVDB.com
-TheMovieDB.org
-Alpacine.com
-Filmposter-Archiv.de
-Cinemagia.ro
-Blu-ray.com
-MoviePosterDB.com
-movieplayer.it
-OFDb.de
-cinema.ptgate.pt
-MovieMeter.nl
-Cine-Passion
-CSFD.cz
-sratim.co.il
-FilmWeb.pl
-PORT.hu
-OutNow.ch
-kinopoisk.ru
-Filmiveeb.ee
-CinemaRx.ro
-Daum.net
-Interfilmes.com
-Sinemalar.com
-Torec.net
-Filmz.dk
-Allocine.fr
-- much more... ;-)
+* amazon.com/de/fr/ca/co.uk
+* TheTVDB.com
+* TheMovieDB.org
+* Alpacine.com
+* Filmposter-Archiv.de
+* Cinemagia.ro
+* Blu-ray.com
+* MoviePosterDB.com
+* movieplayer.it
+* OFDb.de
+* cinema.ptgate.pt
+* MovieMeter.nl
+* Cine-Passion
+* CSFD.cz
+* sratim.co.il
+* FilmWeb.pl
+* PORT.hu
+* OutNow.ch
+* kinopoisk.ru
+* Filmiveeb.ee
+* CinemaRx.ro
+* Daum.net
+* Interfilmes.com
+* Sinemalar.com
+* Torec.net
+* Filmz.dk
+* Allocine.fr
+
