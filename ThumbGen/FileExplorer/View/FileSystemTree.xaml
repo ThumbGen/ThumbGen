@@ -1,0 +1,127 @@
+﻿<UserControl x:Class="FileExplorer.View.FileSystemTree"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:FileExplorer.ViewModel"
+    xmlns:view="clr-namespace:FileExplorer.View"
+    xmlns:thumbgen="clr-namespace:ThumbGen">
+    <UserControl.Resources>
+        <local:GetFileSysemInformationConverter x:Key="getFileSysemInformationConverter"/>
+        <thumbgen:ImageLockFixConverter x:Key="ImageLockFixConverter"/>
+        <thumbgen:SortOption2BoolConverter x:Key="Sort2BoolConverter"/>
+        
+        <HierarchicalDataTemplate DataType="{x:Type local:DirInfo}"
+                                  ItemsSource="{Binding SubDirectories}">
+            <StackPanel Orientation="Horizontal" Focusable="True" x:Name="panel">
+                <CheckBox IsChecked="{Binding IsChecked2, Mode=TwoWay}" Margin="0 0 5 0"
+                          x:Name="chk" VerticalAlignment="Center" Focusable="True">
+                </CheckBox>
+                <ContentPresenter>
+                    <ContentPresenter.Content>
+                        <StackPanel Orientation="Horizontal" Margin="0 1 0 0">
+                            <thumbgen:SimpleSpinner Visibility="Collapsed" x:Name="spinner">
+                                <thumbgen:SimpleSpinner.LayoutTransform>
+                                    <ScaleTransform ScaleX="0.5" ScaleY="0.5"/>
+                                </thumbgen:SimpleSpinner.LayoutTransform>
+                            </thumbgen:SimpleSpinner>
+                            <Image Width="16" Height="24" Stretch="Uniform" 
+                                   Source="{Binding ImgSource, Converter={StaticResource ImageLockFixConverter}, ConverterParameter=16}" 
+                                   x:Name="img" VerticalAlignment="Center" Focusable="False" SnapsToDevicePixels="True"/>
+                            <TextBlock Text="{Binding Name}" Margin="5" VerticalAlignment="Center" Focusable="False" x:Name="txt" />
+                            <TextBlock x:Name="ext" Text="{Binding Ext}" Margin="5 0 0 0" Visibility="Collapsed"
+                                       VerticalAlignment="Center" Focusable="False" />
+                        </StackPanel>
+                    </ContentPresenter.Content>
+                </ContentPresenter>
+                <thumbgen:FileInfoControl VerticalAlignment="Center" Margin="5 0 0 0"
+                                          HasExternalSubtitles="{Binding HasExternalSubtitles}" HasMovieInfo="{Binding HasMovieInfo}" HasMoviesheet="{Binding HasMoviesheet}"
+                                          HasMoviesheetMetadata="{Binding HasMoviesheetMetadata}"/>
+            </StackPanel>
+            <HierarchicalDataTemplate.Triggers>
+                <DataTrigger Binding="{Binding Path=DirType}" Value="MyComputer">
+                    <Setter Property="Source" TargetName="img" Value="/Images/mycomputer.png"/>
+                    <Setter Property="CheckBox.Visibility" TargetName="chk" Value="Collapsed"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=DirType}" Value="DiskDrive">
+                    <!--<Setter Property="CheckBox.Visibility" TargetName="chk" Value="Collapsed"></Setter>-->
+                    <Setter Property="TextBlock.Visibility" Value="Visible" TargetName="ext"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=DirType}" Value="Directory">
+
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=(view:FileSystemTree.IsLoadingVisible)}" Value="True">
+                    <Setter Property="Visibility" TargetName="spinner" Value="Visible"/>
+                    <Setter Property="Visibility" TargetName="img" Value="Collapsed"/>
+                </DataTrigger>
+               
+            </HierarchicalDataTemplate.Triggers>
+        </HierarchicalDataTemplate>
+
+        <Style x:Key="TreeViewItemStyle" TargetType="{x:Type TreeViewItem}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=IsDummy}" Value="true">
+                    <Setter Property="Visibility" Value="Collapsed"></Setter>
+                </DataTrigger>
+
+                <DataTrigger Binding="{Binding Path=DirType}" Value="Directory">
+                    <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />
+                    <Setter Property="thumbgen:VirtualToggleButton.IsVirtualToggleButton" Value="True" />
+                    <Setter Property="thumbgen:VirtualToggleButton.IsChecked" Value="{Binding IsChecked2, Mode=TwoWay}" />
+                </DataTrigger>
+
+            </Style.Triggers>
+            <!-- This Setter applies an attached behavior to all TreeViewItems. -->
+            <Setter Property="thumbgen:TreeViewItemBehavior.IsBroughtIntoViewWhenSelected" Value="True"/>
+            <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+            <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
+            <EventSetter Event="Expanded" Handler="TreeView_Expanded"></EventSetter>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="LightGray" DataContext="{Binding }">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="30"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="1"></RowDefinition>
+        </Grid.RowDefinitions>
+        <TextBlock Margin="10 5 0 5" Grid.Column="0" VerticalAlignment="Center" FontSize="12" HorizontalAlignment="Stretch" FontWeight="Bold">
+            <Run>Select </Run>
+            <Run Foreground="Blue">(using checkboxes)</Run>
+            <Run> the files/folders to process:</Run>
+            <LineBreak/>
+            <Run FontSize="9">(map the network drives to a drive letter in order to see them here)</Run>
+        </TextBlock>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch"
+                    DataContext="{Binding Source={x:Static thumbgen:FileManager.Configuration}, Path=Options.FileBrowserOptions}">
+            <TextBlock Text="Sort:" Margin="10 0 0 0" VerticalAlignment="Center"/>
+
+            <RadioButton Content="Alphabetically" Margin="10 0 0 0" VerticalAlignment="Center" GroupName="Sort" 
+                         IsChecked="{Binding Sorting, Converter={StaticResource Sort2BoolConverter}, ConverterParameter=Alphabetically, Mode=TwoWay}"
+                         Click="Refresh_Click"/>
+            <RadioButton Content="By Date" Margin="10 0 0 0" VerticalAlignment="Center" GroupName="Sort"
+                         IsChecked="{Binding Sorting, Converter={StaticResource Sort2BoolConverter}, ConverterParameter=Date, Mode=TwoWay}"
+                         Click="Refresh_Click"/>
+
+            <CheckBox Content="Ascending" Margin="15 0 0 0" VerticalAlignment="Center" IsChecked="{Binding IsSortingAscending, Mode=TwoWay}"
+                      Click="Refresh_Click"/>
+            
+        </StackPanel>
+
+        <ScrollViewer Margin="0,0,5,0" Grid.Row="2" Grid.ColumnSpan="2" x:Name="treeScroller" Loaded="treeScroller_Loaded"
+                      HorizontalScrollBarVisibility="Visible">
+            <TreeView x:Name="DirectoryTree" 
+                      ItemsSource="{Binding Path=FileTreeVM.SystemDirectorySource}" 
+                      SelectedItemChanged="DirectoryTree_SelectedItemChanged" 
+                      ItemContainerStyle="{StaticResource TreeViewItemStyle}"
+                      BorderThickness="0" >
+            </TreeView>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

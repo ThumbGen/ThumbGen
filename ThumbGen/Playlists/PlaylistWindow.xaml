@@ -1,0 +1,203 @@
+﻿<Window x:Class="ThumbGen.Playlists.PlaylistWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:ThumbGen"
+    xmlns:playlists="clr-namespace:ThumbGen.Playlists"
+    SizeToContent="Manual" WindowStyle="None" ResizeMode="CanResize" Width="900" Height="500" MinHeight="200" MinWidth="200"
+    AllowsTransparency="False" Background="Transparent" ShowInTaskbar="True" Title="Create playlists">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="Bool2VisibConverter"/>
+    </Window.Resources>
+    <Border Padding="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1" Background="White">
+        <Border Padding="5" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1" Background="White"
+                HorizontalAlignment="Stretch">
+            <Grid MinWidth="100" MinHeight="30" HorizontalAlignment="Stretch" x:Name="TheGrid" Grid.IsSharedSizeScope="True">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Create playlists for the selected movies" Margin="0 0 0 20"/>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="5" Grid.Row="1">
+                    <Button x:Name="btnSelectAll" Click="btnSelectAll_Click" Margin="2">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0">
+                            <Image Source="/images/selectall.png" VerticalAlignment="Center" Width="16" Height="16"/>
+                            <TextBlock FontWeight="Normal" Margin="5 0 0 0" VerticalAlignment="Center">Select all</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="btnUnselectAll" Click="btnUnselectAll_Click" Margin="2">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0">
+                            <Image Source="/images/selectnone.png" VerticalAlignment="Center" Width="16" Height="16"/>
+                            <TextBlock FontWeight="Normal" Margin="5 0 0 0" VerticalAlignment="Center">Unselect all</TextBlock>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5" Grid.Row="1">
+                    <Button x:Name="btnAddJob" Click="btnAddJob_Click" Margin="2">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0">
+                            <Image Source="/images/add.png" VerticalAlignment="Center" Width="16" Height="16"/>
+                            <TextBlock FontWeight="Normal" Margin="5 0 0 0" VerticalAlignment="Center">Add new set</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="btnRemoveJob" Click="btnRemoveJob_Click" Margin="2">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0">
+                            <Image Source="/images/minus.png" VerticalAlignment="Center" Width="16" Height="16"/>
+                            <TextBlock FontWeight="Normal" Margin="5 0 0 0" VerticalAlignment="Center">Remove highlighted set</TextBlock>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+
+                <ListBox x:Name="JobsBox" Foreground="Black" VerticalAlignment="Top" SelectionChanged="JobsBox_SelectionChanged" Grid.Row="2"
+                              ItemsSource="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.PlaylistsJobs}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <!--<Border BorderBrush="Gray" BorderThickness="0.5" Margin="2" HorizontalAlignment="Stretch" >-->
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel.Resources>
+                                    <Style TargetType="{x:Type StackPanel}">
+                                        <Setter Property="Margin" Value="5"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                    </Style>
+                                    <Style TargetType="{x:Type Image}">
+                                        <Setter Property="Margin" Value="0 2 0 2"/>
+                                    </Style>
+                                    <playlists:SingleFilenameConverter x:Key="SingleFilenameConverter"/>
+                                    <playlists:ListBoxItemIndexConverter x:Key="ListBoxItemIndexConverter"/>
+                                </StackPanel.Resources>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="g1"/>
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="g2"/>
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="g3"/>
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="g4"/>
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="g5"/>
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="g6"/>
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="g7"/>
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="g8"/>
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="g9"/>
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="g10"/>
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="g11"/>
+                                        <ColumnDefinition Width="Auto" SharedSizeGroup="g12"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Orientation="Horizontal" Grid.Column="0" ToolTip="If checked then the corresponding set will be included in the processing">
+                                        <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type ListBoxItem}},Converter={StaticResource ListBoxItemIndexConverter},StringFormat={}Set {0}}"
+                                                       VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold">
+                                                <TextBlock.LayoutTransform>
+                                                    <RotateTransform Angle="-90"/>
+                                                </TextBlock.LayoutTransform>
+                                        </TextBlock>
+                                        <StackPanel Orientation="Vertical">
+                                            <Image Width="16" Height="16" HorizontalAlignment="Center">
+                                                <Image.Style>
+                                                    <Style TargetType="{x:Type Image}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                                                <Setter Property="Source" Value="/Images/done.png"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                                                <Setter Property="Source" Value="/Images/skipped.png"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Image.Style>
+                                            </Image>
+                                            <CheckBox IsChecked="{Binding Path=IsActive}" Margin="2" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Vertical" Grid.Column="1" ToolTip="Choose the criteria to be used when generating playlists">
+                                        <TextBlock Text="Split Criteria"/>
+                                        <ComboBox ItemsSource="{Binding Source={x:Static playlists:PlaylistWindow.Criterias}}" 
+                                                SelectedValue="{Binding Criteria}" x:Name="cmbSplitCriteria" DisplayMemberPath="Value" SelectedValuePath="Key" MinWidth="120">
+                                        </ComboBox>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Vertical" Grid.Column="2" ToolTip="The filename of the single file playlist (enabled only if no split criteria is chosen)">
+                                        <TextBlock Text="Single filename"/>
+                                        <TextBox MinWidth="30" Text="{Binding Path=SingleFilename}"
+                                                        x:Name="tbSingleFilename" IsEnabled="{Binding Path=Criteria, Converter={StaticResource SingleFilenameConverter}}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Vertical" Grid.Column="3" ToolTip="Choose the first sorting criteria to be used">
+                                        <TextBlock Text="1st Sort Criteria"/>
+                                        <ComboBox ItemsSource="{Binding Source={x:Static playlists:PlaylistWindow.SortCriterias}}" 
+                                                SelectedValue="{Binding Path=SortCriteria}" 
+                                                DisplayMemberPath="Value" SelectedValuePath="Key">
+                                        </ComboBox>
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Vertical" Grid.Column="4" ToolTip="If checked the sorting criteria will be applied descending (by default is Ascending)">
+                                        <Image Source="/images/descending.png" Width="16" Height="16" HorizontalAlignment="Center"/>
+                                        <CheckBox IsChecked="{Binding Path=IsSortingDescending}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Vertical" Grid.Column="5" ToolTip="Choose the second sorting criteria to be used">
+                                        <TextBlock Text="2nd Sort Criteria"/>
+                                        <ComboBox ItemsSource="{Binding Source={x:Static playlists:PlaylistWindow.SortCriterias2}}"
+                                                SelectedValue="{Binding Path=SortCriteria2}" 
+                                                DisplayMemberPath="Value" SelectedValuePath="Key">
+                                        </ComboBox>
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Vertical" Grid.Column="6" ToolTip="If checked the sorting criteria will be applied descending (by default is Ascending)" VerticalAlignment="Center">
+                                        <Image Source="/images/descending.png" Width="16" Height="16" HorizontalAlignment="Center"/>
+                                        <CheckBox IsChecked="{Binding Path=IsSortingDescending2}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Vertical" Grid.Column="7">
+                                        <TextBlock Text="Type" Margin="3" VerticalAlignment="Center"/>
+                                        <TextBlock Text="{Binding Path=FileType}" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Vertical" Grid.Column="8" ToolTip="Choose the folder where the playlist should be created">
+                                        <TextBlock Text="Playlists Location" Margin="3" VerticalAlignment="Center"/>
+                                        <TextBox Text="{Binding Path=RelPath}" MaxWidth="100"/>
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Vertical" Grid.Column="9" ToolTip="If checked then program tries to name the playlists using English terms">
+                                        <Image Source="/images/google_small.png" Width="16" Height="16" HorizontalAlignment="Center"/>
+                                        <CheckBox IsChecked="{Binding Path=ForceEnglishResults}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Vertical" Grid.Column="10" ToolTip="If checked then the movies that cannot be properly placed in some playlist will be placed in a _unassigned playlist">
+                                        <Image Source="/images/unknown.png" Width="16" Height="16" HorizontalAlignment="Center"/>
+                                        <CheckBox IsChecked="{Binding Path=UseUnassignedPlaylist}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Vertical" Grid.Column="11" ToolTip="If checked then the playlist file will contain only the folder of the movie instead of movie filename (makes sense only if movies are in own folders)">
+                                        <Image Source="/images/folder.png" Width="16" Height="16" HorizontalAlignment="Center"/>
+                                        <CheckBox IsChecked="{Binding Path=UseFolderInsteadOfMovie}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Vertical" Grid.Column="12" ToolTip="If checked then Playlists Location folder will be deleted before generating new playlist files">
+                                        <Image Source="/images/del.png" Width="16" Height="16" HorizontalAlignment="Center"/>
+                                        <CheckBox IsChecked="{Binding Path=CleanFolder}"/>
+                                    </StackPanel>
+                                </Grid>
+
+
+
+                            </StackPanel>
+                            <!--</Border>-->
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+                    <Button x:Name="OkButton" ToolTip="Create them!" FontWeight="Bold" Height="23"
+                            Content="Create playlists!" MinWidth="75" Margin="3" IsDefault="False" Click="OkButton_Click"/>
+
+                    <Button x:Name="Cancel" 
+                            Content="Cancel" MinWidth="75" Margin="3" IsCancel="True" Height="23"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Border>
+</Window>

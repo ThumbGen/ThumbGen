@@ -1,0 +1,140 @@
+﻿<Window x:Class="ThumbGen.SelectTemplateBox"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:ThumbGen"
+    SizeToContent="WidthAndHeight" WindowStyle="None" ResizeMode="NoResize" MinWidth="400"
+    AllowsTransparency="False" Background="Transparent" ShowInTaskbar="True" Title="Batch update">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="Bool2VisibConverter"/>
+    </Window.Resources>
+    <Border Padding="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1" Background="White">
+        <Border Padding="5" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1" Background="White"
+                HorizontalAlignment="Stretch">
+            <Grid MinWidth="100" MinHeight="30" HorizontalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <!--<local:OptionsButton VerticalAlignment="Top" Width="23" Height="23" HorizontalAlignment="Right"/>-->
+                <StackPanel Orientation="Vertical" Margin="20">
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Text="Using existing metadata files" Margin="0 0 0 15"/>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- main moviesheet -->
+
+                        <CheckBox IsChecked="{Binding Source={x:Static local:FileManager.Configuration},Path=Options.AutogenerateMovieSheet}" ToolTip="Generate main moviesheet" 
+                                  VerticalAlignment="Center" Grid.Column="0" Grid.Row="0">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/images/backdrop.png" Width="16" Height="16" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                                <TextBlock Margin="3 0 0 0" VerticalAlignment="Center" Text="Generate main moviesheet using:"/>
+                            </StackPanel>
+                        </CheckBox>
+
+                        <local:TemplateSelectorControl x:Name="TemplateSelector" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0"
+                                                   ShowTvixieButton="True" LabelText="" Margin="5 3 0 3"
+                                                   IsEnabled="{Binding Source={x:Static local:FileManager.Configuration},Path=Options.AutogenerateMovieSheet}"/>
+
+                        <!-- extra moviesheet -->
+
+                        <CheckBox IsChecked="{Binding Source={x:Static local:FileManager.Configuration},Path=Options.AutogenerateMoviesheetForFolder}" ToolTip="Generate extra moviesheet" 
+                                  VerticalAlignment="Center" Grid.Column="0" Grid.Row="1">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/images/moviesheet_folder.png" Width="16" Height="16" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                                <TextBlock Margin="3 0 0 0" VerticalAlignment="Center" Text="Generate extra moviesheet using:"/>
+                            </StackPanel>
+                        </CheckBox>
+
+                        <local:TemplateSelectorControl x:Name="TemplateSelectorExtra" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1"
+                                                   ShowTvixieButton="True" LabelText="" Margin="5 3 0 3"
+                                                   IsEnabled="{Binding Source={x:Static local:FileManager.Configuration},Path=Options.AutogenerateMoviesheetForFolder}"/>
+
+
+                        <!-- parentfolder moviesheet -->
+
+                        <CheckBox IsChecked="{Binding Source={x:Static local:FileManager.Configuration},Path=Options.AutogenerateMoviesheetForParentFolder}" ToolTip="Generate parent folder moviesheet" 
+                                  VerticalAlignment="Center" Grid.Column="0" Grid.Row="2">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/images/moviesheet_folder.png" Width="16" Height="16" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                                <TextBlock Margin="3 0 0 0" VerticalAlignment="Center" Text="Generate spare moviesheet using:"/>
+                            </StackPanel>
+                        </CheckBox>
+
+                        <local:TemplateSelectorControl x:Name="TemplateSelectorParentFolder" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2"
+                                                   ShowTvixieButton="True" LabelText="" Margin="5 3 0 3"
+                                                   IsEnabled="{Binding Source={x:Static local:FileManager.Configuration},Path=Options.AutogenerateMoviesheetForParentFolder}"/>
+
+
+                    </Grid>
+
+                    <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
+                        <!-- thumbnail -->
+                        <CheckBox IsChecked="{Binding Source={x:Static local:FileManager.Configuration},Path=Options.AutogenerateThumbnail}" ToolTip="Generate thumbnail" VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/images/image.png" Width="16" Height="16" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                                <TextBlock Margin="3 0 0 0" VerticalAlignment="Center" Text="Generate thumbnail"/>
+                            </StackPanel>
+                        </CheckBox>
+
+
+                        <!-- extra thumbnail -->
+                        <CheckBox IsChecked="{Binding Source={x:Static local:FileManager.Configuration},Path=Options.AutogenerateFolderJpg}" ToolTip="Generate extra thumbnail" 
+                                  VerticalAlignment="Center" Margin="15 0 0 0">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/images/folder.png" Width="16" Height="16" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                                <TextBlock Margin="3 0 0 0" VerticalAlignment="Center" Text="Generate extra thumbnail"/>
+                            </StackPanel>
+                        </CheckBox>
+
+                    </StackPanel>
+
+                    <!-- nfo file -->
+                    <CheckBox IsChecked="{Binding Source={x:Static local:FileManager.Configuration},Path=Options.AutogenerateMovieInfo}" 
+                                  ToolTip="Generate movie info file (accordingly with Movie Info Export settings" VerticalAlignment="Center" Margin="0 10 0 0">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/images/movie.png" Width="16" Height="16" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                            <TextBlock Margin="3 0 0 0" VerticalAlignment="Center" Text="Generate movie info file (nfo)"/>
+                        </StackPanel>
+                    </CheckBox>
+
+
+                    <!-- export images -->
+                    <CheckBox IsChecked="{Binding Source={x:Static local:FileManager.Configuration},Path=Options.EnableExportFromMetadata}" 
+                              ToolTip="Export individual images based on the current settings" VerticalAlignment="Center" Margin="0 10 0 0">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/images/folder.png" Width="16" Height="16" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                            <TextBlock Margin="3 0 0 0" VerticalAlignment="Center" Text="Enable exporting individual images from the main metadata (based on the current settings)"/>
+                        </StackPanel>
+                    </CheckBox>
+
+
+                    <CheckBox  Margin="0 15 0 0" IsChecked="{Binding Source={x:Static local:FileManager.Configuration},Path=Options.UpdateIMDbRating}"  
+                                                ToolTip="If the metadata contains the IMDBd Id of the movie try to contact IMDb and update rating on generated sheets">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/images/imdb_small.png" Width="16" Height="16" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                            <TextBlock Text="Use latest rating from IMDb on the generated sheets" Margin="3 0 0 0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </CheckBox>
+                </StackPanel>
+
+                <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+                    <Button x:Name="OkButton" ToolTip="Use the selected template" FontWeight="Bold" Height="23"
+                            Content="Do it!" MinWidth="75" Margin="3" IsDefault="False" Click="OkButton_Click"/>
+
+                    <Button x:Name="Missing" Height="23" Content="Cancel" MinWidth="75" Margin="3" IsCancel="True"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Border>
+
+</Window>

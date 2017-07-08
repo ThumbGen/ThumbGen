@@ -1,0 +1,461 @@
+﻿<Window x:Class="ThumbGen.ThumbGenMainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:ThumbGen"
+    xmlns:core="clr-namespace:ThumbGen.Core;assembly=ThumbGen.Core"
+    xmlns:ad="clr-namespace:AvalonDock;assembly=AvalonDock"
+    xmlns:fluent="clr-namespace:Fluent;assembly=Fluent"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    x:Name="MainWindow" 
+    Height="768" Width="1024" WindowStartupLocation="CenterScreen" local:WindowSettings.Save="True">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="CommonStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <CollectionViewSource x:Key="MoviesCollectionView"/>
+            <BooleanToVisibilityConverter x:Key="BoolVisibilityConverter"/>
+            <local:BoolNotConverter x:Key="BoolNotConverter"/>
+            <local:AllCollectorsConverter x:Key="AllCollectorsConverter"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <fluent:Ribbon IsQuickAccessToolBarVisible="False" AutomaticStateManagement="true" BackstageBrush="{x:Static local:FileManager.BackstageBrush}" x:Name="TheRibbon">
+            <fluent:Ribbon.BackstageItems>
+                <fluent:BackstageTabItem Header="Help">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <ItemsControl Margin="20 5 20 5">
+                            <TextBlock Text="Support" FontSize="16"/>
+                            <Border Height="1" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Stretch"/>
+                            <Button HorizontalContentAlignment="Left" Margin="10" IsEnabled="False">
+                                <Button.Content>
+                                    <local:BackstageItem Text="Get help using Thumbgen" Title="ThumbGen Help (coming soon)" IconSource="/Images/question32.png"/>
+                                </Button.Content>
+                            </Button>
+                            <Button HorizontalContentAlignment="Left" Margin="10" Click="GotoWebsite_Click">
+                                <Button.Content>
+                                    <local:BackstageItem Text="Find resources to help you learn the basics quickly" Title="Getting Started" IconSource="/Images/started32.png"/>
+                                </Button.Content>
+                            </Button>
+                            <Button HorizontalContentAlignment="Left" Margin="10" Click="GotoWebsite_Click">
+                                <Button.Content>
+                                    <local:BackstageItem Text="Let us know if we can make ThumbGen better" Title="Contact Us" IconSource="/Images/contact32.png"/>
+                                </Button.Content>
+                            </Button>
+
+                            <TextBlock Text="Tools for Working With ThumbGen" FontSize="16"/>
+                            <Border Height="1" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Stretch"/>
+                            <Button HorizontalContentAlignment="Left" Margin="10" Click="btnOptions_Click" Focusable="False">
+                                <Button.Content>
+                                    <local:BackstageItem Text="Customize ThumbGen's parameters" Title="Options" IconSource="/Images/options32.png"/>
+                                </Button.Content>
+                            </Button>
+                            <Button HorizontalContentAlignment="Left" Margin="10" Click="CheckUpdates_Click" Focusable="False">
+                                <Button.Content>
+                                    <local:BackstageItem Text="Get the latest version available for ThumbGen" Title="Check for Updates" IconSource="/Images/updates32.png"/>
+                                </Button.Content>
+                            </Button>
+
+                        </ItemsControl>
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Image Source="/Images/splash.jpg" Width="498" Height="371" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
+                            <StackPanel Orientation="Vertical" Margin="20 -30 0 0" Grid.Row="1" HorizontalAlignment="Left">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="About ThumbGen" FontSize="16" VerticalAlignment="Center"/>
+                                    <!--<Image Source="/images/beta.png" Width="32" Height="32" Stretch="Uniform" Margin="10 0 0 0" VerticalAlignment="Center"/>-->
+                                </StackPanel>
+                                <Border Height="1" BorderBrush="Black" BorderThickness="1" Width="230"/>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Margin="0 0 0 0" Text="{Binding Source={x:Static core:VersionNumber.LongVersion}, StringFormat=Version: \{0\}}"/>
+                                    <TextBlock Text="(Core:" Margin="5 0 0 0"/>
+                                    <TextBlock Margin="2 0 0 0" Text="{Binding Source={x:Static core:VersionNumber.CoreLongVersion}, StringFormat=Version: \{0\}}"/>
+                                    <TextBlock Text=")"/>
+                                </StackPanel>
+                                <TextBlock Text="Email: thumbgen@googlemail.com" Margin="0 10 0 0"/>
+                                <TextBlock  ToolTip="Visit the website periodically for news and updates" x:Name="AboutText" Margin="0 0 0 0">
+                                    <Run>Website: </Run>
+                                    <Hyperlink NavigateUri="http://thumbgen.org" local:HyperlinkController.NavigatesToUrl="True">http://thumbgen.org</Hyperlink>
+                                </TextBlock>
+                                <StackPanel Orientation="Horizontal" Margin="0 5 0 0" HorizontalAlignment="Left">
+                                    <Button x:Name="TwitterButton" Click="Twitter_Click" Margin="0 5 0 0" Cursor="Hand" HorizontalAlignment="Left">
+                                        <Button.Template>
+                                            <ControlTemplate>
+                                                <Image Source="/images/twitter.png" Margin="0 0 3 0" VerticalAlignment="Center" Width="61" Height="23"/>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                    </Button>
+                                    <Button x:Name="FacebookButton" Click="Facebook_Click" Margin="0 5 0 0" Cursor="Hand" HorizontalAlignment="Left">
+                                        <Button.Template>
+                                            <ControlTemplate>
+                                                <Image Source="/images/facebook.png" Margin="0 0 3 0" VerticalAlignment="Center" Width="61" Height="23"/>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                    </Button>
+                                </StackPanel>
+                                <TextBlock Text="@2009-2013 ThumbGen. No rights reserved :-)" Margin="0 10 0 0"/>
+                            </StackPanel>
+
+                        </Grid>
+                    </Grid>
+                </fluent:BackstageTabItem>
+
+                <fluent:Button Text="Options" Icon="/Images/options32.png" Name="btnOptions" Click="btnOptions_Click">
+                    <fluent:Button.ToolTip>
+                        <fluent:ScreenTip Title="Options" Text="Customize ThumbGen's parameters"/>
+                    </fluent:Button.ToolTip>
+                </fluent:Button>
+                <fluent:Button Text="Exit ThumbGen" Name="btnExit" Click="exitButton_Click">
+                    <fluent:Button.ToolTip>
+                        <fluent:ScreenTip Title="Exit application" Text="Exits ThumbGen application"/>
+                    </fluent:Button.ToolTip>
+                </fluent:Button>
+            </fluent:Ribbon.BackstageItems>
+            <fluent:RibbonTabItem Header="Home">
+                <fluent:RibbonGroupBox Header="Profiles">
+                    <local:ProfileSelector  OnProfileChanged="ProfileSelector_OnProfileChanged" OnProfileSaving="ProfileSelector_OnProfileSaving" MinWidth="200" Margin="0 2 0 2"
+                                        Manager="{Binding Source={x:Static local:FileManager.ProfilesMan}}" HeaderText="Current Profile">
+                    </local:ProfileSelector>
+                </fluent:RibbonGroupBox>
+
+                <fluent:RibbonGroupBox Header="Configure">
+                    <CheckBox Margin="5 10 0 0" Name="cbUseFolderNameForDetection" ToolTip="If checked the folder name will be used to detect the movie. Use this ONLY if you store each movie inside a dedicated folder"
+                          VerticalAlignment="Center" IsChecked="{Binding Source={x:Static local:FileManager.Configuration},Path=Options.UseFolderNamesForDetection}">Detect movie based on folder name</CheckBox>
+                    <CheckBox Margin="5 5 0 0" Name="cbPromptBeforeSearch" ToolTip="If checked the user will be prompted to adjust keywords before each query otherwise an automatic attempt is executed"
+                          VerticalAlignment="Center" IsChecked="{Binding Source={x:Static local:FileManager.Configuration},Path=Options.PromptBeforeSearch}">Prompt for keywords before every search</CheckBox>
+                    <fluent:Button LargeIcon="/images/options32.png" Text="Options" Click="btnOptions_Click" Margin="10 0 10 0">
+                        <fluent:Button.ToolTip>
+                            <fluent:ScreenTip Title="Options" Text="Opens the Options window"/>
+                        </fluent:Button.ToolTip>
+                    </fluent:Button>
+                </fluent:RibbonGroupBox>
+
+                <fluent:RibbonGroupBox Header="Process">
+                    <fluent:Button Name="btnFileExplorer" LargeIcon="/Images/foldersgears32.png" Click="startbutton_Click" Text="Process files/folders" FontWeight="Normal">
+                        <fluent:Button.ToolTip>
+                            <fluent:ScreenTip Title="Process files/folders" Text="Shows the File Browser with all possible actions" FontWeight="Normal"/>
+                        </fluent:Button.ToolTip>
+                    </fluent:Button>
+
+                    <fluent:Button Name="btnQuicksheet" LargeIcon="/Images/quick32.png" Text="Quicksheet" Click="debugTemplateBtn_Click" Margin="10 0 0 0">
+                        <fluent:Button.ToolTip>
+                            <fluent:ScreenTip Title="Quicksheet" Text="Opens the Quicksheet window that allows creating manually &#x0a; metadata files, .nfo files or moviesheets.&#x0a;It's a playground..."/>
+                        </fluent:Button.ToolTip>
+                    </fluent:Button>
+                </fluent:RibbonGroupBox>
+                <fluent:RibbonGroupBox Header="Customize">
+                    <fluent:Button Name="btnDesigner" LargeIcon="/Images/designer32.png" Text="ThumbGen Designer" Click="btnDesigner_Click" Margin="10 0 0 0">
+                        <fluent:Button.ToolTip>
+                            <fluent:ScreenTip Title="Launch ThumbgGen Designer" Text="Opens the ThumbGen Designer application that allows customizing existing or creating new templates.&#x0a;NOTE: If the Designer is not found in ThumbGen's directory you will be redirected to the download location."/>
+                        </fluent:Button.ToolTip>
+                    </fluent:Button>
+                    <fluent:Button Name="btnBundlesManager" LargeIcon="/Images/package32.png" Text="Manage Bundles" Click="btnBundlesManager_Click"  Margin="10 0 0 0">
+                        <fluent:Button.ToolTip>
+                            <fluent:ScreenTip Title="Launch Bundles Manager" 
+                                              Text="Opens the Bundles Manager that allows installing/uninstalling template bundles"/>
+                        </fluent:Button.ToolTip>
+                    </fluent:Button>
+                </fluent:RibbonGroupBox>
+            </fluent:RibbonTabItem>
+            <fluent:RibbonTabItem Header="Import">
+                <fluent:RibbonGroupBox Header="ThumbGen imports automatically movie info from these apps">
+                    <fluent:RibbonGroupBox.ToolTip>
+                        <fluent:ScreenTip Title="Automatic Import" Text="For the automatic imported files you don't have to do anything; ThumbGen finds/imports the data on-the-fly"/>
+                    </fluent:RibbonGroupBox.ToolTip>
+                    <fluent:Button LargeIcon="/images/ember.png" Text="Ember Media Manager" IsEnabled="False"/>
+                    <fluent:Button LargeIcon="/images/xbmc32.png" Text="xbmc" IsEnabled="False"/>
+                    <fluent:Button LargeIcon="/images/mymovies32.png" Text="My Movies" IsEnabled="False"/>
+                    <fluent:Button LargeIcon="/images/tvixie.png" Text="TViXiE" IsEnabled="False"/>
+                    <fluent:Button LargeIcon="/images/collectorz32.png" Text="Collectorz.com Movie Collector" IsEnabled="False">
+                        <fluent:Button.ToolTip>
+                            <fluent:ScreenTip Title="Collectorz.com Movie Collector" Text="Export your collection as XML in the Movie Collector and then in Options/Import select the XML file"/>
+                        </fluent:Button.ToolTip>
+                    </fluent:Button>
+                    <fluent:Button LargeIcon="/images/ant32.png" Text="Ant Movie Catalog" IsEnabled="False">
+                        <fluent:Button.ToolTip>
+                            <fluent:ScreenTip Title="Ant Movie Catalog" Text="Export your collection as XML in the Ant Movie Catalog and then in Options/Import select the XML file"/>
+                        </fluent:Button.ToolTip>
+                    </fluent:Button>
+                </fluent:RibbonGroupBox>
+            </fluent:RibbonTabItem>
+            <fluent:RibbonTabItem Header="Tools">
+                <fluent:RibbonGroupBox Header="Predefined Telnet/SSH Functions" x:Name="grpSSHTools">
+                    <fluent:RibbonGroupBox.ToolTip>
+                        <fluent:ScreenTip Title="Telnet/SSH Tools" Text="Send SSH commands to a device in the network; use Options/SSH-Telnet to define Host/IP and credentials for connection"/>
+                    </fluent:RibbonGroupBox.ToolTip>
+
+                    <fluent:Button Text="Reboot Device" x:Name="btnSSHReboot" Margin="10 0 0 0" LargeIcon="/Images/reboot32.png" Click="btnSSHReboot_Click">
+                        <fluent:Button.ToolTip>
+                            <fluent:ScreenTip Title="Send Reboot" Text="Send the Reboot command to the network device"/>
+                        </fluent:Button.ToolTip>
+                    </fluent:Button>
+
+                    <fluent:Button Text="Change Password" x:Name="btnTelnetChangePass" Margin="10 0 0 0" LargeIcon="/Images/pass32.png" Click="btnTelnetChangePass_Click">
+                        <fluent:Button.ToolTip>
+                            <fluent:ScreenTip Title="Change Password" Text="Change the password for the device setup in Options/SSH-Telnet"/>
+                        </fluent:Button.ToolTip>
+                    </fluent:Button>
+
+                    <!-- here will come the autogenerated buttons with custom scripts-->
+
+                </fluent:RibbonGroupBox>
+                <fluent:RibbonGroupBox Header="Telnet/SSH Commands (Expert Mode)" >
+                    <Expander ExpandDirection="Right" Header="Expert Mode">
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="Enter the SSH command below and press Send! to execute it" Margin="10 5 5 5" VerticalAlignment="Center"/>
+                                    <ComboBox IsReadOnly="False" ItemsSource="{Binding Source={x:Static local:FileManager.Configuration},Path=Options.SSHOptions.SSHHistory}"
+                                    Width="300" IsEditable="True" VerticalAlignment="Center" Margin="10 5 5 5" KeyUp="cmbSSHHistory_KeyUp"
+                                    x:Name="cmbSSHHistory"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Prompt" Margin="5" VerticalAlignment="Center"/>
+                                        <TextBox VerticalAlignment="Center" x:Name="tbPrompt" Text="#"/>
+                                    </StackPanel>
+                                    <CheckBox x:Name="cbSendMethod" Content="Use SSH" IsChecked="True" Margin="5"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <fluent:Button Text="Send!" x:Name="btnSSHSend" Margin="10 0 0 0" LargeIcon="/Images/execute32.png" Click="btnSSHSend_Click">
+                                <fluent:Button.ToolTip>
+                                    <fluent:ScreenTip Title="Send Command" Text="Send the selected command to the network device"/>
+                                </fluent:Button.ToolTip>
+                            </fluent:Button>
+                        </StackPanel>
+                    </Expander>
+                </fluent:RibbonGroupBox>
+                <!--<fluent:RibbonGroupBox Header="Protect template" x:Name="grpProtectTemplate">
+                    <fluent:Button Text="Protect Template File" x:Name="btnProtectTemplate" LargeIcon="/images/protect.png" Click="btnProtectTemplate_Click"/>
+                </fluent:RibbonGroupBox>-->
+            </fluent:RibbonTabItem>
+            <!--<fluent:RibbonTabItem Header="About">
+                <fluent:RibbonGroupBox Header="Updates">
+                    <fluent:Button Name="btnCheckUpdates" Text="Check for updates" Click="CheckUpdates_Click">
+                        <fluent:Button.ToolTip>
+                            <fluent:ScreenTip Title="Check for updates" Text="Connects to the remote server and checks if there is a new version available"/>
+                        </fluent:Button.ToolTip>
+                    </fluent:Button>
+                </fluent:RibbonGroupBox>
+                <fluent:RibbonGroupBox Header="About">
+                    <fluent:Button Name="btnAbout" Text="About" Click="AboutButton_Click">
+                        <fluent:Button.ToolTip>
+                            <fluent:ScreenTip Title="Check for updates" Text="Connects to the remote server and checks if there is a new version available"/>
+                        </fluent:Button.ToolTip>
+                    </fluent:Button>
+                </fluent:RibbonGroupBox>
+            </fluent:RibbonTabItem>
+            <fluent:Ribbon.ToolBarItems>
+                <fluent:Button Size="Small" Icon="Images/question.png"/>
+            </fluent:Ribbon.ToolBarItems>-->
+
+        </fluent:Ribbon>
+        <ad:DockingManager Name="DockManager" Grid.Row="1" DataContext="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options}"
+                           Loaded="DockManager_Loaded">
+            <ad:ResizingPanel Orientation="Horizontal" Name="rpResizer">
+                <ad:DocumentPane Name="dpDocumentPane">
+                    <ad:DocumentContent Title="Movies / TV Shows" Name="dcMovies" IsCloseable="False">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Focusable="False">
+                            <Grid x:Name="MainGrid">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <WebBrowser Visibility="Collapsed" x:Name="TheWebBrowser" Width="0" Height="0"/>
+
+                                <GroupBox Style="{StaticResource GroupBoxStyle}" Header="Collectors" Margin="5">
+                                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="5">
+                                        <!--<TextBlock Grid.Column="1" Text="Get images from:" VerticalAlignment="Center"/>-->
+                                        <StackPanel Orientation="Vertical">
+                                            <CheckBox x:Name="cbShowAllCollectors" Content="Show all collectors" HorizontalAlignment="Right"
+                                                      IsChecked="{Binding Source={x:Static local:FileManager.Configuration},Path=Options.ShowAllCollectors}"/>
+                                            <StackPanel Orientation="Horizontal" Margin="5 0 0 0">
+                                                <Image Source="/images/image.png" HorizontalAlignment="Left" Margin="0 0 0 0" ToolTip="Choose preferred cover collector"/>
+                                                <Image Source="/images/movie.png" HorizontalAlignment="Left" Margin="0 0 0 0" ToolTip="Choose preferred info collector"/>
+                                                <Image Source="/images/image.png" HorizontalAlignment="Left" Margin="217 0 0 0" ToolTip="Choose preferred cover collector"/>
+                                                <Image Source="/images/movie.png" HorizontalAlignment="Left" Margin="0 0 0 0" ToolTip="Choose preferred info collector"/>
+                                            </StackPanel>
+                                            <ListBox Grid.Column="2" Margin="5 0 0 0" Name="collectorsBox" ToolTip="Choose at least one provider from the list"
+                                                     VerticalAlignment="Center" HorizontalAlignment="Left" MinWidth="180" MaxWidth="510"
+                                                     IsSynchronizedWithCurrentItem="True" Focusable="False"
+                                                     SelectionMode="Multiple" ItemsSource="{Binding}" FocusVisualStyle="{x:Null}"
+                                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                                                     IsEnabled="{Binding ElementName=cbDisableSearch,Path=IsChecked,Converter={StaticResource BoolNotConverter}, Mode=OneWay}" 
+                                                     Effect="{StaticResource BlurEffect}">
+                                                <ListBox.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <WrapPanel IsItemsHost="True"/>
+                                                    </ItemsPanelTemplate>
+                                                </ListBox.ItemsPanel>
+                                                <ListBox.ItemTemplate>
+                                                    <HierarchicalDataTemplate>
+                                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" MinWidth="250" ToolTip="{Binding Collector.Tooltip}"
+                                                                    IsEnabled="{Binding Path=IsEnabled}">
+                                                            <StackPanel.Visibility>
+                                                                <MultiBinding Converter="{StaticResource AllCollectorsConverter}" Mode="OneWay">
+                                                                    <Binding ElementName="cbShowAllCollectors" Path="IsChecked"/>
+                                                                    <Binding ElementName="rbPreferredCover" Path="IsChecked"/>
+                                                                    <Binding ElementName="rbPreferredInfo" Path="IsChecked"/>
+                                                                    <Binding ElementName="cbCollNode" Path="IsChecked"/>
+                                                                </MultiBinding>
+                                                            </StackPanel.Visibility>
+                                                            <ContentControl MinWidth="16" VerticalAlignment="Center" VerticalContentAlignment="Center" ToolTip="Set this as preferred cover collector">
+                                                                <RadioButton Visibility="{Binding ElementName=cbCollNode, Path=IsChecked, Converter={StaticResource BoolVisibilityConverter}}" 
+                                                     VerticalAlignment="Center" GroupName="PrefCoverCollector" IsChecked="{Binding IsPreferedCoverCollector}" x:Name="rbPreferredCover"/>
+                                                            </ContentControl>
+                                                            <ContentControl MinWidth="16" VerticalAlignment="Center" VerticalContentAlignment="Center" ToolTip="Set this as preferred info collector">
+                                                                <RadioButton Visibility="{Binding Path=Collector.SupportsMovieInfo,Converter={StaticResource BoolVisibilityConverter}}" 
+                                                     VerticalAlignment="Center" GroupName="PrefInfoCollector" IsChecked="{Binding IsPreferedInfoCollector}" x:Name="rbPreferredInfo"/>
+                                                            </ContentControl>
+                                                            <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected}" Focusable="True" Margin="2" MinWidth="135" Name="cbCollNode"/>
+                                                            <local:PopupInfoControl VerticalAlignment="Center" Margin="2 0 0 0" Visibility="Visible"
+                                                            SupportsIMDbSearch="{Binding Path=Collector.SupportsIMDbSearch}"
+                                                            SupportsBackdrops="{Binding Path=Collector.SupportsBackdrops}"
+                                                            SupportsMovieInfo="{Binding Path=Collector.SupportsMovieInfo}"
+                                                            Country="{Binding Path=Collector.Country}"/>
+                                                        </StackPanel>
+                                                    </HierarchicalDataTemplate>
+                                                </ListBox.ItemTemplate>
+                                                <ListBox.ItemContainerStyle>
+                                                    <Style TargetType="{x:Type ListBoxItem}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSelected}" Value="True">
+                                                                <Setter Property="IsSelected" Value="True"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                        <!--<Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="ListBoxItem">
+                                                                    <ContentPresenter />
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>-->
+                                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                                        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                                                    </Style>
+                                                </ListBox.ItemContainerStyle>
+                                            </ListBox>
+                                            <CheckBox Height="16" Margin="5 5 0 0" Name="cbDisableSearch" 
+                                              ToolTip="If checked the search functionality is disabled user can use just screenshots or images from disk"
+                                              VerticalAlignment="Center" IsChecked="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.DisableSearch}" 
+                                                      HorizontalAlignment="Center">
+                                                <TextBlock>
+                                                    <Run>Disable search</Run><Run FontSize="9" xml:space="preserve"> (use only own screenshots/images)</Run>
+                                                </TextBlock>
+                                            </CheckBox>
+                                            <TextBlock HorizontalAlignment="Center" FontSize="9">
+                                                <Hyperlink NavigateUri="http://thumbgen.org/index.php?option=com_contact&amp;view=contact&amp;id=1&amp;Itemid=56" local:HyperlinkController.NavigatesToUrl="True">Report broken collector</Hyperlink>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </GroupBox>
+
+                            </Grid>
+                        </ScrollViewer>
+                    </ad:DocumentContent>
+                </ad:DocumentPane>
+                <ad:DockablePane Name="dpMainPanel">
+                    <ad:DockableContent Title="Output Log" IsCloseable="False" Name="dcLog">
+                        <ListBox Grid.Row="1" Margin="10" Name="progressListBox" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+                                        VirtualizingStackPanel.IsVirtualizing="False" ScrollViewer.CanContentScroll="False">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Height="16" Width="16">
+                                            <Image.Style>
+                                                <Style TargetType="{x:Type Image}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding MovieItemStatus}" Value="Done">
+                                                            <Setter Property="Source" Value="Images\done.png"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding MovieItemStatus}" Value="Skipped">
+                                                            <Setter Property="Source" Value="Images\skipped.png"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding MovieItemStatus}" Value="Querying">
+                                                            <Setter Property="Source" Value="Images\query.png"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding MovieItemStatus}" Value="SkippedExistingThumbnail">
+                                                            <Setter Property="Source" Value="Images\skipped.png"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding MovieItemStatus}" Value="Unknown">
+                                                            <Setter Property="Source" Value="Images\unknown.png"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding MovieItemStatus}" Value="NotFound">
+                                                            <Setter Property="Source" Value="Images\warning.png"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding MovieItemStatus}" Value="MetadataMissing">
+                                                            <Setter Property="Source" Value="Images\skipped.png"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding MovieItemStatus}" Value="Exception">
+                                                            <Setter Property="Source" Value="Images\warning.png"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Image.Style>
+                                        </Image>
+                                        <TextBlock Margin="2 0 0 0" FontWeight="Bold"  VerticalAlignment="Center" Text="..\"/>
+                                        <TextBlock Margin="2 0 0 0" FontWeight="Bold"  VerticalAlignment="Center" Text="{Binding MovieFolderName}"/>
+                                        <TextBlock Margin="2 0 0 0" FontWeight="Bold"  VerticalAlignment="Center" Text="\"/>
+                                        <TextBlock Margin="2 0 0 0" FontWeight="Bold" Foreground="Navy" VerticalAlignment="Center" Text="{Binding Filename}"/>
+                                        <TextBlock Margin="10 0 0 0" VerticalAlignment="Center">
+                                            <TextBlock.Style>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding MovieItemStatus}" Value="Done">
+                                                            <Setter Property="Text" Value=" [Done]"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding MovieItemStatus}" Value="Skipped">
+                                                            <Setter Property="Text" Value="[Skipped]"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding MovieItemStatus}" Value="Querying">
+                                                            <Setter Property="Text" Value="Processing..."/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding MovieItemStatus}" Value="SkippedExistingThumbnail">
+                                                            <Setter Property="Text" Value="[Skipped (thumbnail exists)]"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding MovieItemStatus}" Value="NotFound">
+                                                            <Setter Property="Text" Value="[Not Found]"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding MovieItemStatus}" Value="MetadataMissing">
+                                                            <Setter Property="Text" Value="[Missing metadata]"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding MovieItemStatus}" Value="Exception">
+                                                            <Setter Property="Text" Value="[Cannot render]"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ad:DockableContent>
+                </ad:DockablePane>
+            </ad:ResizingPanel>
+        </ad:DockingManager>
+        <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Stretch" Background="White">
+            <TextBlock FontSize="9" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Navy">All photos are property of their respective owners and may not be reused without permission</TextBlock>
+            <TextBlock Margin="10 3 5 3" Name="textBlock1" VerticalAlignment="Bottom" />
+            <ProgressBar Height="10" Name="progressBar1" VerticalAlignment="Bottom" />
+        </StackPanel>
+
+    </Grid>
+</Window>

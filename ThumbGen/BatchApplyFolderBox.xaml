@@ -1,0 +1,68 @@
+﻿<Window x:Class="ThumbGen.BatchApplyFolderBox"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:ThumbGen"
+    SizeToContent="WidthAndHeight" WindowStyle="None" ResizeMode="NoResize"
+    AllowsTransparency="False" Background="Transparent" ShowInTaskbar="False">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibConverter"/>
+        <local:NotBoolToVisibilityConverter x:Key="NotBoolToVisibConverter"/>
+    </Window.Resources>
+    <Border Padding="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1" Background="White">
+        <Border Padding="5" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1" Background="White">
+            <Grid MinWidth="100" MinHeight="30" Margin="10" HorizontalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid x:Name="TheGrid">
+                    <Canvas Height="150" Width="100" x:Name="TheCanvas">
+                        <Image Grid.Column="0" Grid.Row="0" x:Name="TheImage" Height="150" Width="100" HorizontalAlignment="Left" Stretch="Uniform"/>
+                    </Canvas>
+                </Grid>
+                <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock FontSize="14" Text="Choose this image for all movies in " Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock FontWeight="Bold" x:Name="TheFolder" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="10 30 0 0" x:Name="PromptWatermarkText">
+                        <RadioButton x:Name="rbManual" IsChecked="True">
+                            <TextBlock>
+                                <Run FontWeight="Bold">Manual:</Run>
+                                <Run>Ask user to confirm/adjust text for each movie</Run>
+                            </TextBlock>
+                        </RadioButton>
+                        <RadioButton x:Name="rbAuto" Margin="0 5 0 0">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock VerticalAlignment="Center" Margin="0 0 5 0">
+                                <Run FontWeight="Bold">Auto:</Run>
+                                <Run>Use this mask for the text:</Run>
+                                </TextBlock>
+                                <TextBox Width="100" Margin="0 0 5 0" VerticalAlignment="Center" 
+                                         Text="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.BatchAutoMask, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock FontSize="9">
+                                    <Run>$S = Season nr</Run>
+                                    <LineBreak/>
+                                    <Run>$E = Episode/CD nr</Run>
+                                </TextBlock>
+                            </StackPanel>
+                        </RadioButton>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="10 10 10 0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Button x:Name="OverwriteAll" ToolTip="Generate thumbnails for all movies in the current folder (replacing any existing ones)"
+                            Content="Do it for all movies (overwrite existing)" MinWidth="75" Margin="3" IsDefault="True" Click="OverwriteAll_Click"/>
+                    <Button x:Name="UpdateMissing" ToolTip="Generate thumbnails for all movies in the current folder (skipping movies that already have a thumbnail)"
+                            Content="Do it just for movies without thumbnail" MinWidth="75" Margin="3" Click="UpdateMissing_Click"/>
+                    <Button x:Name="Cancel" ToolTip="Do nothing just go back to Results Page"
+                            Content="Go back to Results Page" MinWidth="75" Margin="3" IsCancel="True"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Border>
+
+</Window>
+

@@ -1,0 +1,57 @@
+﻿<Window x:Class="ThumbGen.Bundles.BundlesManagerView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:bundles="clr-namespace:ThumbGen.Bundles" 
+        xmlns:local="clr-namespace:ThumbGen" 
+        Title="Bundles Manager - Manage your bundles here" MinHeight="400" MinWidth="500" 
+        Height="400" Width="500"
+        WindowStartupLocation="CenterOwner" ResizeMode="CanResize">
+    <Window.Resources>
+        <bundles:BundlesManagerViewModel x:Key="viewModel"/>
+    </Window.Resources>
+    <Grid DataContext="{StaticResource viewModel}" x:Name="mainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <!--<TextBlock Text="Manage your installed bundles here." Margin="15" HorizontalAlignment="Center" FontWeight="Bold"/>-->
+        <Button Grid.Row="1" Content="Add New Bundle" HorizontalAlignment="Center" MinWidth="150" 
+                Command="{Binding AddBundleCommand}" CommandParameter="{Binding ElementName=mainGrid}"
+                Margin="10"/>
+        <ListBox Grid.Row="2" ItemsSource="{Binding Bundles}" HorizontalContentAlignment="Stretch">
+            <ListBox.Resources>
+                <DataTemplate DataType="{x:Type bundles:Bundle}">
+                    <Border BorderThickness="1" BorderBrush="DarkGray" HorizontalAlignment="Stretch" Margin="2" CornerRadius="3">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Image Grid.RowSpan="2" Source="/images/package24.png" VerticalAlignment="Center" Width="24" Height="24" Margin="5"/>
+                            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
+                                <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="5 5 5 0"/>
+                                <TextBlock Text="{Binding Author,StringFormat={}by {0}}" FontWeight="DemiBold" Margin="0 5 5 0"/>
+                            </StackPanel>
+                            <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Version,StringFormat={}Version {0}}" Margin="5 0 0 5"/>
+                            <TextBlock Grid.Column="2" Text="{Binding InstalledOn}" Margin="5 5 5 0" HorizontalAlignment="Right"/>
+                            <Button Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5"
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox,Mode=FindAncestor},Path=DataContext.RemoveBundleCommand}"
+                                    CommandParameter="{Binding}">
+                                <!--<Image Source="/images/del.png" VerticalAlignment="Center" Width="16" Height="16"/>-->
+                                Uninstall
+                            </Button>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.Resources>
+        </ListBox>
+        <Button Grid.Row="3" Content="Close" HorizontalAlignment="Center" MinWidth="150" Margin="10" IsCancel="True"/>
+    </Grid>
+</Window>

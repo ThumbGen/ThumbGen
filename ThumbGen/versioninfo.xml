@@ -1,0 +1,18 @@
+<VersionInfo>
+  <CurrentVersion>
+    <VersionNumber>1.9.10.0</VersionNumber>
+    <Files>
+      <File Zipped="True">
+        <RemoteName>TG.zip</RemoteName>
+        <Name>ThumbGen.exe</Name>
+      </File>
+    </Files>
+    <FilesNew>
+      <File>
+        <RemoteName>ThumbGen.zip</RemoteName>
+        <Name>ThumbGen.exe</Name>
+      </File>
+    </FilesNew>
+    <ReleaseNotes>Recommended update.</ReleaseNotes>
+  </CurrentVersion>
+</VersionInfo>

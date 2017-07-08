@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<UserOptions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <AutoCheckUpdates>true</AutoCheckUpdates>
+  <OverwriteExistingThumbs>true</OverwriteExistingThumbs>
+  <AutogenerateFolderJpg>false</AutogenerateFolderJpg>
+  <AutogenerateThumbnail>true</AutogenerateThumbnail>
+  <AutogenerateMovieSheet>true</AutogenerateMovieSheet>
+  <AutogenerateMoviesheetForFolder>false</AutogenerateMoviesheetForFolder>
+  <AutogenerateMovieInfo>true</AutogenerateMovieInfo>
+  <AutogenerateMoviesheetMetadata>true</AutogenerateMoviesheetMetadata>
+  <GenerateParentFolderMetadata>false</GenerateParentFolderMetadata>
+  <AutogenerateMoviesheetForParentFolder>false</AutogenerateMoviesheetForParentFolder>
+  <UseIMDbIdWherePossible>true</UseIMDbIdWherePossible>
+  <UseMovieHashWherePossible>false</UseMovieHashWherePossible>
+  <PromptBeforeSearch>false</PromptBeforeSearch>
+  <UseFolderNamesForDetection>true</UseFolderNamesForDetection>
+  <UpdateIMDbRating>false</UpdateIMDbRating>
+  <UseBlacklist>false</UseBlacklist>
+  <Blacklist />
+  <Collectors>,TheMovieDB.org</Collectors>
+  <PreferedInfoCollector>TheMovieDB.org</PreferedInfoCollector>
+  <PreferedCoverCollector>TheMovieDB.org</PreferedCoverCollector>
+  <PreviewType>BestFit</PreviewType>
+  <CustomMovieExtensions />
+  <SkipFoldersHavingStrings />
+  <ThumbnailSize>
+    <Width>240</Width>
+    <Height>360</Height>
+  </ThumbnailSize>
+  <KeepAspectRatio>true</KeepAspectRatio>
+  <AddWatermark>false</AddWatermark>
+  <MTNPath />
+  <EnableMultiCoreSupport>true</EnableMultiCoreSupport>
+  <SaveOriginalCoverAsExtraThumbnail>true</SaveOriginalCoverAsExtraThumbnail>
+  <SemiautomaticTimeout>5</SemiautomaticTimeout>
+  <ExportNfoAsTvixie>false</ExportNfoAsTvixie>
+  <ExportNfoAsXBMC>false</ExportNfoAsXBMC>
+  <ExportNfoAsThumbGen>true</ExportNfoAsThumbGen>
+  <PutFullMediaInfoToExportedNfo>false</PutFullMediaInfoToExportedNfo>
+  <UserDefinedFilesFilter>vts_((?!01_0).)*\.ifo|video_ts.ifo</UserDefinedFilesFilter>
+  <CustomDateFormat>dd.MM.yyyy</CustomDateFormat>
+  <ShowAllCollectors>true</ShowAllCollectors>
+  <EnableSmartOutputForDVDBRAY>true</EnableSmartOutputForDVDBRAY>
+  <MovieSheetsOptions>
+    <Count>2</Count>
+    <TemplateName>_ACRyan POHD Template_</TemplateName>
+    <ExtraTemplateName>_ACRyan POHD Template_</ExtraTemplateName>
+    <ParentFolderTemplateName>_ACRyan POHD Template_</ParentFolderTemplateName>
+    <MaxFilesize>500000</MaxFilesize>
+    <IsMaxQuality>true</IsMaxQuality>
+    <AutopopulateFromMetadata>false</AutopopulateFromMetadata>
+    <InsertInPoolFromMetadata>false</InsertInPoolFromMetadata>
+    <DoNotAutopopulateBackdrop>false</DoNotAutopopulateBackdrop>
+    <DoNotAutopopulateFanart>false</DoNotAutopopulateFanart>
+    <DefaultExternalSubtitlesLanguage>en</DefaultExternalSubtitlesLanguage>
+    <TVShowsLanguage>en</TVShowsLanguage>
+    <DefaultAudioLanguage>en</DefaultAudioLanguage>
+    <IgnoreOtherLanguages>false</IgnoreOtherLanguages>
+    <AutotranslateGenre>false</AutotranslateGenre>
+    <DisablePreferredInfoCollector>false</DisablePreferredInfoCollector>
+    <AutorefreshPreview>true</AutorefreshPreview>
+    <OverscanLeft>0</OverscanLeft>
+    <OverscanRight>0</OverscanRight>
+    <OverscanTop>0</OverscanTop>
+    <OverscanBottom>0</OverscanBottom>
+    <AutoTakeScreenshots>false</AutoTakeScreenshots>
+    <ApplyOverscanMain>true</ApplyOverscanMain>
+    <ApplyOverscanExtra>true</ApplyOverscanExtra>
+    <ApplyOverscanSpare>true</ApplyOverscanSpare>
+    <MovieInfoPriorities>
+      <MovieInfoProviderItemType>PrefCollector</MovieInfoProviderItemType>
+      <MovieInfoProviderItemType>MyOwn</MovieInfoProviderItemType>
+      <MovieInfoProviderItemType>Metadata</MovieInfoProviderItemType>
+      <MovieInfoProviderItemType>IMDB</MovieInfoProviderItemType>
+    </MovieInfoPriorities>
+  </MovieSheetsOptions>
+  <NamingOptions>
+    <SelectedPredefinedItem>80</SelectedPredefinedItem>
+    <SelectedExtraPredefinedItem>85</SelectedExtraPredefinedItem>
+    <ThumbnailMask>$M\folder</ThumbnailMask>
+    <ThumbnailExtension>.jpg</ThumbnailExtension>
+    <FolderjpgMask>$M\folder</FolderjpgMask>
+    <FolderjpgExtension>.jpg</FolderjpgExtension>
+    <MovieinfoMask>$M\$N</MovieinfoMask>
+    <MovieinfoExtension>.nfo</MovieinfoExtension>
+    <MovieinfoExportMask>$M\$N</MovieinfoExportMask>
+    <MovieinfoExportExtension>.nfo</MovieinfoExportExtension>
+    <MoviesheetMask>$M\0001</MoviesheetMask>
+    <MoviesheetMetadataMask>$M\$N$E</MoviesheetMetadataMask>
+    <ParentFolderMetadataMask>$M\..\$P</ParentFolderMetadataMask>
+    <MoviesheetForFolderMask>$M\..\0001</MoviesheetForFolderMask>
+    <MoviesheetForParentFolderMask>$M\..\..\0001</MoviesheetForParentFolderMask>
+    <MoviesheetExtension>.jpg</MoviesheetExtension>
+    <MoviesheetMetadataExtension>.tgmd</MoviesheetMetadataExtension>
+  </NamingOptions>
+  <TVShowsFiltersOptions>
+    <UseX>true</UseX>
+    <UseAired>true</UseAired>
+    <UseDVD>true</UseDVD>
+    <UseAbsolute>false</UseAbsolute>
+    <UseShort>false</UseShort>
+  </TVShowsFiltersOptions>
+</UserOptions>

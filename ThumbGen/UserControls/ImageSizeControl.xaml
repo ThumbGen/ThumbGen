@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="ThumbGen.ImageSizeControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             >
+    <CheckBox x:Name="TheCheckbox" IsChecked="{Binding IsResizing, Mode=TwoWay}" IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}},Path=IsEnabled}">
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Resize to " VerticalAlignment="Center"/>
+            <TextBox Margin="5 0 0 0" Width="60" VerticalAlignment="Center" Text="{Binding WidthPx, Mode=TwoWay}"/>
+            <TextBlock Margin="5 0 0 0" VerticalAlignment="Center" Text="x"/>
+            <TextBox Margin="5 0 0 0" Width="60" VerticalAlignment="Center" Text="{Binding HeightPx, Mode=TwoWay}"/>
+            <TextBlock Margin="5 0 0 0" VerticalAlignment="Center" Text="pixels"/>
+        </StackPanel>
+    </CheckBox>
+</UserControl>

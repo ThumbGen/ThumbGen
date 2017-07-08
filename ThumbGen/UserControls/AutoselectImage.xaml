@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="ThumbGen.AutoselectImage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="Bool2VisibilityConverter"/>
+    </UserControl.Resources>
+    <StackPanel Orientation="Horizontal" x:Name="TheStackPanel" DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}}}">
+        <CheckBox ToolTip="{Binding ToolTip}" IsChecked="{Binding Autoselect}" x:Name="cbAutoselect" VerticalAlignment="Center">
+            <TextBlock Margin="0" VerticalAlignment="Center" IsEnabled="{Binding ElementName=cbAutoselect,Path=IsChecked}" Text="{Binding PrefixText}"/>
+        </CheckBox>
+        
+        <TextBox Margin="5 0 5 0" VerticalAlignment="Center" Text="{Binding Filename}" MinWidth="100" IsEnabled="{Binding ElementName=cbAutoselect,Path=IsChecked}"/>
+        <ComboBox Grid.Column="3" Grid.Row="0" x:Name="cmbExtension" IsEnabled="False" SelectedItem="{Binding Extension}" Visibility="{Binding IsExtensionVisible,Converter={StaticResource Bool2VisibilityConverter}}">
+            <ComboBoxItem Content=".jpg" IsSelected="True"/>
+        </ComboBox>
+        <TextBlock VerticalAlignment="Center" Text="{Binding TargetText}" IsEnabled="{Binding ElementName=cbAutoselect,Path=IsChecked}"/>
+        
+    </StackPanel>
+</UserControl>

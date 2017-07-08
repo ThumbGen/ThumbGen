@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="ThumbGen.AutomaticAdorner"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <Border BorderThickness="1" BorderBrush="Red" x:Name="TheBorder">
+        <Grid x:Name="TheGrid" Opacity="1" HorizontalAlignment="Stretch" Background="Transparent">
+            <Button IsEnabled="True">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="?" FontWeight="Bold" Margin="0" VerticalAlignment="Center" Foreground="Red" x:Name="tbCounter"/>
+                    <TextBlock Text=" sec" FontWeight="Bold" VerticalAlignment="Center" Foreground="Red"/>
+                    <TextBlock Text=" left" FontWeight="Bold" VerticalAlignment="Center" Foreground="Red"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+    </Border>
+</UserControl>

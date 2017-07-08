@@ -1,0 +1,88 @@
+<IMDBMultiCountry>
+	<Country Code="com" Charset="UTF-8" Host="http://akas.imdb.com">
+		<Popular>Popular Titles</Popular>
+		<Exact>Titles (Exact Matches)</Exact>
+		<Approx>Titles (Approx Matches)</Approx>
+		<Partial>Titles (Partial Matches)</Partial>
+		<Country Tip="Not used anymore">Country:</Country>
+    <Language>en-US</Language>
+		<Director>(Directors?|Creators?):</Director>
+		<Genres><![CDATA[<a href=\"/Sections/Genres/[^/]*/\">([^\"]*)</a>]]></Genres>
+		<Overview Tip="Not used anymore as the Storyline is now on the main page"><![CDATA[<p class=\"plotpar\">(?<Plot>.*?)<i>]]></Overview>
+		<Plot>Storyline</Plot>
+		<Company>Company:</Company>
+		<ReleaseDateFast>Date:</ReleaseDateFast>
+	</Country>
+	<Country Code="de" Charset="iso-8859-1" Host="http://www.imdb.de">
+		<Popular>Meistgesuchte Titel</Popular>
+		<Exact>
+      <![CDATA[Titel (genaue &#xDC;bereinstimmung)]]>
+    </Exact>
+		<Approx><![CDATA[Titel (n&#xE4;herungsweise &#xDC;bereinstimmung)]]></Approx>
+		<Partial><![CDATA[Titel (teilweise &#xDC;bereinstimmung)]]></Partial>
+		<Country>Land:</Country>
+    <Language>de-DE</Language>
+		<Director><![CDATA[(Regisseur|Sch&#xF6;pfer):]]></Director>
+		<Genres><![CDATA[<h5>Genre:</h5>.*?<div class=\"info-content\">(.*?)</div>]]></Genres>
+		<Overview><![CDATA[id=\"swiki.2.1\">(?<Plot>.*?)</div]]></Overview>
+		<Plot>Handlung:</Plot>
+		<Company>Firma:</Company>
+		<ReleaseDateFast>Premierendatum:</ReleaseDateFast>
+	</Country>
+  <Country Code="es" Charset="iso-8859-1" Host="http://www.imdb.es">
+    <Popular><![CDATA[T&#xED;tulos Populares]]></Popular>
+    <Exact><![CDATA[T&#xED;tulos (Resultados Exactos)]]></Exact>
+    <Approx><![CDATA[T&#xED;tulos (Resultados Aproximados)]]></Approx>
+    <Partial><![CDATA[T&#xED;tulos (Resultados Parciales)]]></Partial>
+    <Country><![CDATA[Pa&#xED;s:]]></Country>
+    <Language>es-ES</Language>
+    <Director><![CDATA[(Director|Creadores):]]></Director>
+    <Genres><![CDATA[<h5>G&#xE9;nero:</h5>.*?<div class=\"info-content\">(.*?)</div>]]></Genres>
+    <Overview><![CDATA[id=\"swiki.2.1\">(?<Plot>.*?)</div]]></Overview>
+    <Plot>Trama:</Plot>
+    <Company><![CDATA[Compa&#xF1;&#xED;a:]]></Company>
+    <ReleaseDateFast>Fecha de Estreno:</ReleaseDateFast>
+  </Country>
+  <Country Code="it" Charset="iso-8859-1" Host="http://www.imdb.it">
+    <Popular>Titoli popolari</Popular>
+    <Exact>Titoli (risultati esatti)</Exact>
+    <Approx>Titoli (risultati approssimati)</Approx>
+    <Partial>Titoli (risultati parziali)</Partial>
+    <Country><![CDATA[Nazionalit&#xE0;:]]></Country>
+    <Language>it</Language>
+    <Director></Director>
+    <Genres><![CDATA[<h5>Genere:</h5>.*?<div class=\"info-content\">(.*?)</div>]]></Genres>
+    <Overview><![CDATA[id=\"swiki.2.1\">(?<Plot>.*?)</div]]></Overview>
+    <Plot>Trama:</Plot>
+    <Company>Compagnia:</Company>
+    <ReleaseDateFast>Data di uscita:</ReleaseDateFast>
+  </Country>
+  <Country Code="fr" Charset="iso-8859-1" Host="http://www.imdb.fr">
+    <Popular><![CDATA[Titres Populaires]]></Popular>
+    <Exact><![CDATA[Titres (R&#xE9;sultats Exacts)]]></Exact>
+    <Approx><![CDATA[Titres (R&#xE9;sultats Approximatif)]]></Approx>
+    <Partial><![CDATA[Titres (R&#xE9;sultats Partiels)]]></Partial>
+    <Country><![CDATA[Pays:]]></Country>
+    <Language>fr-FR</Language>
+    <Director><![CDATA[(R&#xE9;alisateur|Cr&#xE9;ateurs):]]></Director>
+    <Genres><![CDATA[<h5>Genre:</h5>.*?<div class=\"info-content\">(.*?)</div>]]></Genres>
+    <Overview><![CDATA[id=\"swiki.2.1\">(?<Plot>.*?)</div]]></Overview>
+    <Plot>Intrigue:</Plot>
+    <Company><![CDATA[Soci&#xE9;t&#xE9;:]]></Company>
+    <ReleaseDateFast>Date de sortie:</ReleaseDateFast>
+  </Country>
+  <Country Code="pt" Charset="iso-8859-1" Host="http://www.imdb.pt">
+    <Popular><![CDATA[T&#xED;tulos Populares]]></Popular>
+    <Exact><![CDATA[T&#xED;tulos (Exato)]]></Exact>
+    <Language>pt-PT</Language>
+    <Approx><![CDATA[T&#xED;tulos (Combina&#xE7;&#xE3;o Aproximada)]]></Approx>
+    <Partial><![CDATA[T&#xED;tulos (Combina&#xE7;&#xE3;o Parcial)]]></Partial>
+    <Country><![CDATA[Pa&#xED;s:]]></Country>
+    <Director><![CDATA[(Diretor|Criadores):]]></Director>
+    <Genres><![CDATA[<h5>G&#xEA;nero:</h5>.*?<div class=\"info-content\">(.*?)</div>]]></Genres>
+    <Overview><![CDATA[id=\"swiki.2.1\">(?<Plot>.*?)</div]]></Overview>
+    <Plot>Argumento:</Plot>
+    <Company><![CDATA[Companhia :]]></Company>
+    <ReleaseDateFast><![CDATA[Data de Lan&#xE7;amento:]]></ReleaseDateFast>
+  </Country>
+</IMDBMultiCountry>

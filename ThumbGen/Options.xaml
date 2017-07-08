@@ -1,0 +1,1108 @@
+﻿<Window x:Class="ThumbGen.Options"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:ThumbGen"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    SizeToContent="Manual" WindowStyle="SingleBorderWindow" ResizeMode="CanResize" MinWidth="850" MinHeight="570" x:Name="OptionsWindow"
+    ShowInTaskbar="True" Title="Options" local:WindowSettings.Save="True">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="CommonStyles.xaml"/>
+                <ResourceDictionary Source="OutlookNavigatorPaneDict.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <local:ConnectionToBoolConverter x:Key="ConnectionToBoolConverter"/>
+            <BooleanToVisibilityConverter x:Key="Bool2VisibConverter"/>
+            <local:NotBoolToVisibilityConverter x:Key="NotBool2VisibConverter"/>
+            <Style TargetType="{x:Type TabItem}"/>
+            <Style TargetType="{x:Type TextBox}"/>
+
+        </ResourceDictionary>
+    </Window.Resources>
+    <Border Padding="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1" Background="White">
+        <Border Padding="5" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="1" Background="White"
+                HorizontalAlignment="Stretch">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" MinHeight="250"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.Resources>
+
+                </Grid.Resources>
+                <TabControl x:Name="TabOptions" VerticalAlignment="Stretch" TabStripPlacement="Left" SnapsToDevicePixels="True">
+                    <TabItem x:Name="tabGeneral" Header="General">
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Vertical">
+                                <GroupBox Header="Movie Detection Settings" Style="{StaticResource GroupBoxStyle}" Margin="5">
+                                    <StackPanel Orientation="Vertical" Margin="10 0 0 0" VerticalAlignment="Top">
+                                        <CheckBox Margin="5" ToolTip="If checked the folder name will be used to detect the movie. Use this ONLY if you store each movie inside a dedicated folder"
+                                              IsChecked="{Binding UseFolderNamesForDetection}">Detect movie based on folder name</CheckBox>
+                                        <CheckBox Margin="5" ToolTip="If checked the app will parse .nfo/.txt files near the movie for some imdbid and if found will use if for search"
+                                              Visibility="Collapsed" IsChecked="{Binding UseIMDbIdWherePossible}">Use IMDb Id from .nfo/.txt where possible</CheckBox>
+                                        <CheckBox Margin="5" ToolTip="If checked the app will try to use the movie hash to locate better the movie (switch it off if it is too slow for you)"
+                                              IsChecked="{Binding UseMovieHashWherePossible}">Use movie hash where possible (slower)</CheckBox>
+                                        <CheckBox Margin="5" ToolTip="If checked then during movies processing existing thumbnails will be overwritten without any confirmation. Use this with caution!"
+                                              IsChecked="{Binding OverwriteExistingThumbs}">Overwrite existing thumbnails</CheckBox>
+                                        <CheckBox Margin="5" ToolTip="If checked the user will be prompted to adjust keywords before each query otherwise an automatic attempt is executed"
+                                              IsChecked="{Binding PromptBeforeSearch}">Prompt for keywords before every search</CheckBox>
+                                        <CheckBox Margin="5" ToolTip="If checked the processing will skip the folders starting with a dot"
+                                              IsChecked="{Binding SkipFoldersStartingWithDot}">Skip folders starting with . (dot)</CheckBox>
+                                        <CheckBox Margin="5" Name="cbUseBlacklist" ToolTip="If checked then the user-defined (comma separated) list of words to skip will be used"
+                                              IsChecked="{Binding UseBlacklist}" xml:space="preserve">Skip also these words (comma separated, regex accepted): </CheckBox>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBox Margin="5 2 5 5" IsEnabled="{Binding ElementName=cbUseBlacklist, Path=IsChecked}" FontSize="10" HorizontalAlignment="Left"
+                                                Name="tbBlacklist" Width="300" Text="{Binding Blacklist}"
+                                                ToolTip="List of words to be skipped during movie detection (use comma as a separator); Regex are accepted"/>
+                                            <CheckBox Margin="5" Name="cbSwitchOffInternalNoiseRemover" ToolTip="If checked then all internal regex used to clean the moviename will be skipped"
+                                              IsChecked="{Binding SwitchOffInternalNoiseRemover}" xml:space="preserve">Disable internal noise remover</CheckBox>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </GroupBox>
+
+                                <GroupBox Header="Generating thumbnails/backdrops using snapshots" Style="{StaticResource GroupBoxStyle}" Margin="5">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Margin="5" HorizontalAlignment="Left">
+                                        <Run>Path to movie thumbnailer:</Run>
+                                        <Run FontSize="9"> (you need it for snapshot-based thumbs)</Run>
+                                        </TextBlock>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10 0 0 0">
+                                            <TextBox Width="200" Text="{Binding MTNPath}"/>
+                                            <Button Content="..." x:Name="btnSelectMTNPath" Click="btnSelectMTNPath_Click"/>
+                                            <TextBlock VerticalAlignment="Center" Margin="5 0 0 0" HorizontalAlignment="Right">
+                                            <Hyperlink NavigateUri="http://sourceforge.net/projects/moviethumbnail/" 
+                                                       local:HyperlinkController.NavigatesToUrl="True">Download it now!</Hyperlink>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </GroupBox>
+
+                                <GroupBox Header="Default language for multilanguage collectors (TheTVDB, TheMovieDB)" Style="{StaticResource GroupBoxStyle}" Margin="5">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10 10 5 0">
+                                        <TextBlock Text="Language:"  VerticalAlignment="Center" Margin="0 0 10 0"/>
+                                        <ComboBox x:Name="cmbTVShowsLanguages" MinWidth="150" VerticalAlignment="Center"
+                                                  SelectedValue="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.MovieSheetsOptions.TVShowsLanguage}"
+                                                  SelectedValuePath="TwoLetterISOLanguageName"
+                                                  DisplayMemberPath="NativeName" ItemsSource="{Binding}"
+                                                  ToolTip="Set here the language that you want to be used when retrieving data from TVDB.com">
+                                        </ComboBox>
+                                        <TextBlock FontSize="9" Margin="5 0 0 0" VerticalAlignment="Center">
+                                                <Run>English will be used by default</Run>
+                                                <LineBreak/>
+                                                <Run>if the selected language is not found</Run>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </GroupBox>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <GroupBox Header="Extra thumbnail" Style="{StaticResource GroupBoxStyle}" Margin="5">
+                                        <CheckBox Margin="10 5 0 0" ToolTip="If checked the extra thumbnail will not be scaled using the settings for thumbnail but will be saved using original size"
+                                              IsChecked="{Binding SaveOriginalCoverAsExtraThumbnail}">Save original cover without resizing</CheckBox>
+                                    </GroupBox>
+                                    <GroupBox Header="Mediainfo" Style="{StaticResource GroupBoxStyle}" Margin="5">
+                                        <CheckBox Margin="10 5 0 0" ToolTip="If checked the program stores in the .nfo file the complete mediainfo data about the movie"
+                                              IsChecked="{Binding PutFullMediaInfoToExportedNfo}">Put full mediainfo to exported .nfo</CheckBox>
+                                    </GroupBox>
+                                </StackPanel>
+
+                                <GroupBox Header="Custom Date Format" Style="{StaticResource GroupBoxStyle}" Margin="5" HorizontalAlignment="Left">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBox Margin="10 5 0 0" ToolTip="Enter the date format that should be used when displaying a date (accepted values: d,M,y and any separator can be used)"
+                                              Text="{Binding CustomDateFormat}" Width="100" HorizontalAlignment="Left"/>
+                                        <Button Content="Preview" VerticalAlignment="Center" Margin="10 0 0 0" Click="btnDatePreview_Click"/>
+                                        <TextBlock Text="" VerticalAlignment="Center" Margin="5 0 0 0" x:Name="txtPreview"/>
+                                    </StackPanel>
+                                </GroupBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical">
+                                <GroupBox Header="Generate" Style="{StaticResource GroupBoxStyle}" Margin="5">
+                                    <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top">
+
+                                        <CheckBox IsChecked="{Binding AutogenerateThumbnail}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="/images/image.png" Width="16" Height="16" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                                                <TextBlock Margin="3 0 0 0" VerticalAlignment="Center" Text="Thumbnail"/>
+                                            </StackPanel>
+                                        </CheckBox>
+
+                                        <CheckBox IsChecked="{Binding AutogenerateFolderJpg}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="/images/folder.png" Width="16" Height="16" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                                                <TextBlock Margin="3 0 0 0" VerticalAlignment="Center" Text="Extra thumbnail"/>
+                                            </StackPanel>
+                                        </CheckBox>
+
+                                        <CheckBox IsChecked="{Binding AutogenerateMovieInfo}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="/images/movie.png" Width="16" Height="16" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                                                <TextBlock Margin="3 0 0 0" VerticalAlignment="Center" Text="Movie information"/>
+                                            </StackPanel>
+                                        </CheckBox>
+
+                                        <CheckBox IsChecked="{Binding AutogenerateMovieSheet}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="/images/backdrop.png" Width="16" Height="16" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                                                <TextBlock Margin="3 0 0 0" VerticalAlignment="Center" Text="Main moviesheet"/>
+                                            </StackPanel>
+                                        </CheckBox>
+
+                                        <CheckBox IsChecked="{Binding AutogenerateMoviesheetForFolder}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="/images/moviesheet_folder.png" Width="16" Height="16" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                                                <TextBlock Margin="3 0 0 0" VerticalAlignment="Center" Text="Extra moviesheet"/>
+                                            </StackPanel>
+                                        </CheckBox>
+
+                                        <CheckBox IsChecked="{Binding AutogenerateMoviesheetMetadata}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="/images/metadata.gif" Width="16" Height="16" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                                                <TextBlock Margin="3 0 0 0" VerticalAlignment="Center" Text="Main/Extra moviesheet metadata"/>
+                                            </StackPanel>
+                                        </CheckBox>
+
+                                        <CheckBox IsChecked="{Binding AutogenerateMoviesheetForParentFolder}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="/images/moviesheet_folder.png" Width="16" Height="16" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                                                <TextBlock Margin="3 0 0 0" VerticalAlignment="Center" Text="Spare moviesheet"/>
+                                            </StackPanel>
+                                        </CheckBox>
+                                        <CheckBox IsChecked="{Binding GenerateParentFolderMetadata}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="/images/metadata.gif" Width="16" Height="16" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                                                <TextBlock Margin="3 0 0 0" VerticalAlignment="Center" Text="Spare moviesheet metadata"/>
+                                            </StackPanel>
+                                        </CheckBox>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Header="Select Files/Folders Browser" Style="{StaticResource GroupBoxStyle}" Margin="5">
+                                    <StackPanel Orientation="Vertical" Margin="10" VerticalAlignment="Top">
+                                        <CheckBox ToolTip="If checked the program will display selected movie's mediainfo" Margin="0 7 0 0"
+                                              IsChecked="{Binding FileBrowserOptions.ShowMediaInfo}">Show media info</CheckBox>
+                                        <CheckBox ToolTip="If checked the program will display the moviesheet when a movie file is selected (if available)" Margin="0 7 0 0"
+                                              IsChecked="{Binding FileBrowserOptions.ShowMovieSheet}">Show moviesheet</CheckBox>
+                                        <CheckBox ToolTip="If checked when a folder is selected the program will display the first moviesheet found inside the folder (if available)" Margin="0 7 0 0"
+                                              IsChecked="{Binding FileBrowserOptions.ShowMovieSheetAtFolderLevel}">Show moviesheet at folder level</CheckBox>
+                                        <CheckBox IsChecked="{Binding FileBrowserOptions.ShowHasExternalSubtitles}" VerticalAlignment="Center" Margin="0 7 0 0">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Image Source="/images/OpenSubtitlesFavIcon.gif" Width="16" Height="16" Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                <TextBlock Margin="3 0 0 0" VerticalAlignment="Center" Text="Show 'Has external subtitles'"/>
+                                            </StackPanel>
+                                        </CheckBox>
+                                        <CheckBox IsChecked="{Binding FileBrowserOptions.ShowHasMovieInfo}" VerticalAlignment="Center" Margin="0 7 0 0">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Image Source="/images/movie.png" Width="16" Height="16" Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                <TextBlock Margin="3 0 0 0" VerticalAlignment="Center" Text="Show 'Has movie info (.nfo file)'"/>
+                                            </StackPanel>
+                                        </CheckBox>
+                                        <CheckBox IsChecked="{Binding FileBrowserOptions.ShowHasMoviesheet}" VerticalAlignment="Center" Margin="0 7 0 0">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Image Source="/images/backdrop.png" Width="16" Height="16" Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                <TextBlock Margin="3 0 0 0" VerticalAlignment="Center" Text="Show 'Has moviesheet'"/>
+                                            </StackPanel>
+                                        </CheckBox>
+                                        <CheckBox IsChecked="{Binding FileBrowserOptions.ShowHasMoviesheetMetadata}" VerticalAlignment="Center" Margin="0 7 0 0">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Image Source="/images/metadata.gif" Width="16" Height="16" Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                <TextBlock Margin="3 0 0 0" VerticalAlignment="Center" Text="Show 'Has moviesheet metadata'"/>
+                                            </StackPanel>
+                                        </CheckBox>
+                                    </StackPanel>
+                                </GroupBox>
+                            </StackPanel>
+                        </StackPanel>
+                    </TabItem>
+                    <TabItem x:Name="tabMoviesheets" Header="Moviesheets">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            <StackPanel Orientation="Vertical">
+                                <GroupBox Header="Moviesheets Properties" Style="{StaticResource GroupBoxStyle}" Margin="5">
+                                    <StackPanel Orientation="Vertical" Margin="5">
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10 5 5 0">
+                                            <TextBlock Text="Default language for external subtitles:"  VerticalAlignment="Center" Margin="0 0 10 0"/>
+                                            <ComboBox x:Name="cmbLanguages" MinWidth="150" VerticalAlignment="Center"
+                                                  SelectedValue="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.MovieSheetsOptions.DefaultExternalSubtitlesLanguage}"
+                                                  SelectedValuePath="TwoLetterISOLanguageName"
+                                                  DisplayMemberPath="NativeName" ItemsSource="{Binding}"
+                                                  ToolTip="Set here the language that you use by default for external subtitles">
+                                            </ComboBox>
+                                            <CheckBox IsChecked="{Binding MovieSheetsOptions.IgnoreOtherLanguages}" Content="Ignore any other languages" Margin="10 0 0 0"
+                                                  ToolTip="If checked all other languages different than the default one will be ignored" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10 5 5 0">
+                                            <TextBlock Text="Default language for audio stream:"  VerticalAlignment="Center" Margin="0 0 10 0"/>
+                                            <ComboBox x:Name="cmbDefaultAudioLanguage" MinWidth="150" VerticalAlignment="Center"
+                                                  SelectedValue="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.MovieSheetsOptions.DefaultAudioLanguage}"
+                                                  SelectedValuePath="TwoLetterISOLanguageName"
+                                                  DisplayMemberPath="NativeName" ItemsSource="{Binding}"
+                                                  ToolTip="Set here the default language for the audio stream">
+                                            </ComboBox>
+                                        </StackPanel>
+                                        <local:MaxFilesizeControl IsMaxQuality="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.MovieSheetsOptions.IsMaxQuality, Mode=TwoWay}"
+                                                                  LimitBytes="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.MovieSheetsOptions.MaxFilesize, Mode=TwoWay}"
+                                                                  HorizontalAlignment="Left"/>
+                                        <!--<StackPanel Orientation="Horizontal">
+                                            <TextBlock Margin="5" HorizontalAlignment="Left" Text="Max. filesize:" VerticalAlignment="Center"/>
+                                            <CheckBox Margin="5" Name="cbIsMaxQuality" ToolTip="If checked then the moviesheet will be rendered at max quality"
+                                              IsChecked="{Binding MovieSheetsOptions.IsMaxQuality}" VerticalAlignment="Center" >No limit (max. quality)</CheckBox>
+                                            <StackPanel Orientation="Horizontal" Visibility="{Binding ElementName=cbIsMaxQuality, Path=IsChecked,Converter={StaticResource NotBool2VisibConverter}}">
+                                                <TextBlock Margin="2 0 5 0" HorizontalAlignment="Left" Text="Limit to:" VerticalAlignment="Center"/>
+                                                <TextBox Width="50" Text="{Binding MovieSheetsOptions.MaxFilesize,FallbackValue=50000}" VerticalAlignment="Center"/>
+                                                <TextBlock Margin="5 0 0 0" HorizontalAlignment="Left" Text="bytes" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </StackPanel>-->
+                                    </StackPanel>
+                                </GroupBox>
+                                <StackPanel Orientation="Horizontal">
+                                    <GroupBox Header="Processing Properties" Style="{StaticResource GroupBoxStyle}" Margin="5">
+                                        <StackPanel Orientation="Vertical">
+                                            <CheckBox Margin="10 10 5 2" ToolTip="If checked the moviesheet will not be populated with a random backdrop when displaying Results page" VerticalAlignment="Center"
+                                              IsChecked="{Binding MovieSheetsOptions.DoNotAutopopulateBackdrop}">Do not auto populate the moviesheet with backdrop by default</CheckBox>
+                                            <CheckBox Margin="10 2 5 2" ToolTip="If checked the moviesheet will not be populated with random fanarts when displaying Results page" VerticalAlignment="Center"
+                                              IsChecked="{Binding MovieSheetsOptions.DoNotAutopopulateFanart}">Do not auto populate the moviesheet with fanarts by default</CheckBox>
+                                            <CheckBox Margin="10 2 5 2" ToolTip="Select this option on multi-core CPU to speed up batch generating of moviesheets from metadata" 
+                                                VerticalAlignment="Center" x:Name="cbMulticoreCPU"
+                                                IsChecked="{Binding EnableMultiCoreSupport}">Enable multi-core CPU support</CheckBox>
+                                            <CheckBox Margin="10 2 5 2" ToolTip="If checked the moviesheets previews will be instantly refreshed when backdrop/movieinfo/fanarts/cover is changed" VerticalAlignment="Center"
+                                              IsChecked="{Binding MovieSheetsOptions.AutorefreshPreview}">Auto refresh moviesheets small preview</CheckBox>
+                                            <CheckBox Margin="10 2 5 2" ToolTip="If checked and at least a screenshot is available then it will be used as Fanart3"
+                                              IsChecked="{Binding RetrieveEpisodeScreenshots}">Use a screenshot (if available) as Fanart3</CheckBox>
+                                            <CheckBox Margin="10 2 5 2" ToolTip="Try to take 3 screenshots and place them in the backdrops pool"
+                                              IsChecked="{Binding MovieSheetsOptions.AutoTakeScreenshots}">Automatically take 3 screenshots (if possible)</CheckBox>
+                                            <CheckBox Margin="10 2 5 2" ToolTip="If metadata is found the contained images are placed in the backdrops pool"
+                                              IsChecked="{Binding MovieSheetsOptions.InsertInPoolFromMetadata}">Insert images from metadata in the backdrops pool</CheckBox>
+                                            <StackPanel Orientation="Horizontal" Margin="10 5 0 0">
+                                                <TextBlock VerticalAlignment="Center">Auto execute default action in automatic mode after</TextBlock>
+                                                <TextBox Margin="5 0 5 0" VerticalAlignment="Center" Text="{Binding SemiautomaticTimeout}" MinWidth="50"/>
+                                                <TextBlock VerticalAlignment="Center"> seconds</TextBlock>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </GroupBox>
+                                    <GroupBox Header="Current Moviesheets Templates" Style="{StaticResource GroupBoxStyle}" Margin="5">
+                                        <StackPanel Orientation="Vertical" Margin="5">
+                                            <local:TemplateSelectorControl x:Name="TemplateSelector" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0"
+                                                   ShowTvixieButton="True" LabelText="Main :" Margin="5 3 0 3"/>
+                                            <local:TemplateSelectorControl x:Name="TemplateSelectorExtra" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1"
+                                                   ShowTvixieButton="True" LabelText="Extra :" Margin="5 3 0 3"/>
+                                            <local:TemplateSelectorControl x:Name="TemplateSelectorParentFolder" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2"
+                                                   ShowTvixieButton="True" LabelText="Spare:" Margin="5 3 0 3"/>
+                                        </StackPanel>
+                                    </GroupBox>
+                                </StackPanel>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </TabItem>
+                    <TabItem x:Name="tabTVShows" Header="TVShows/Series/Anime">
+                        <StackPanel Orientation="Vertical">
+                            <GroupBox Header="TV Shows Properties (TheTVDB.com)" Style="{StaticResource GroupBoxStyle}" Margin="5">
+                                <StackPanel Orientation="Vertical">
+                                    <CheckBox Margin="10 5 0 0" ToolTip="If checked the program tries to autoselect a widebanner as Fanart2"
+                                              IsChecked="{Binding GetBannerAsFanart2}">Use wide banner (if available) as Fanart2</CheckBox>
+                                    <CheckBox Margin="10 5 0 5" ToolTip="If checked the banners will be also retrieved (currently supported only by thetvdb.com)"
+                                              IsChecked="{Binding RetrieveBannersAsBackdrops}">Retrieve all banners as backdrops (required by the option above)</CheckBox>
+                                </StackPanel>
+                            </GroupBox>
+                            <GroupBox Header="Filters used to detect Season/Episode ( $ is a season number and # is an episode number)" Style="{StaticResource GroupBoxStyle}" Margin="5">
+                                <StackPanel Orientation="Vertical">
+                                    <CheckBox Content="Use $x# format (ie. 1x04). Supports: Aired Order" IsChecked="{Binding TVShowsFiltersOptions.UseX}" VerticalAlignment="Center" Margin="0 7 0 0"/>
+                                    <CheckBox Content="Use S$E# format (ie. s3E6, S04.e3). Supports: Aired Order" IsChecked="{Binding TVShowsFiltersOptions.UseAired}" VerticalAlignment="Center" Margin="0 7 0 0"/>
+                                    <CheckBox Content="Use S$D# format (ie. s3D6, S04.d3). Supports: DVD Order" IsChecked="{Binding TVShowsFiltersOptions.UseDVD}" VerticalAlignment="Center" Margin="0 7 0 0"/>
+                                    <CheckBox Content="Use ### format (ie. 001, 258). Supports: Absolute Order" IsChecked="{Binding TVShowsFiltersOptions.UseAbsolute}" VerticalAlignment="Center" Margin="0 7 0 0"/>
+                                    <CheckBox Content="Use $$## format (ie. 101, 312). Supports: Aired Order" IsChecked="{Binding TVShowsFiltersOptions.UseShort}" VerticalAlignment="Center" Margin="0 7 0 0"/>
+                                    <TextBlock Text="NOTE: Use always Season 0 for Specials" Margin="10"/>
+                                </StackPanel>
+                            </GroupBox>
+                            <GroupBox Header="Episode files structure" Style="{StaticResource GroupBoxStyle}" Margin="5">
+                                <StackPanel Orientation="Vertical">
+                                    <CheckBox Content="I have each of my episodes in its own folder( [SeriesFolder]\[SeasonFolder]\[EpisodeFolder]\episode file )" IsChecked="{Binding TVShowsFiltersOptions.UseEachEpisodeInOwnFolder}" VerticalAlignment="Center" Margin="0 7 0 0"/>
+                                    <TextBlock Margin="0 5 0 0">NOTE: If unchecked the app assumes the structure is [SeriesFolder]\[SeasonFolder]\episode files</TextBlock>
+                                </StackPanel>
+                            </GroupBox>
+                        </StackPanel>
+                    </TabItem>
+                    <TabItem x:Name="tabMovieInfoSources" Header="Movie Info">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal">
+                                    <GroupBox Header="MovieInfo Sources Priorities" Style="{StaticResource GroupBoxStyle}" Margin="5">
+                                        <StackPanel Orientation="Vertical">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                                                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="5">
+                                                    <TextBlock Text="Higher"/>
+                                                    <Button x:Name="BtnMoveUp" Click="BtnMoveUp_Click" Margin="0 10 0 0">
+                                                        <Button.ContentTemplate>
+                                                            <DataTemplate>
+                                                                <Image Source="/Images/arrow_up.png"/>
+                                                            </DataTemplate>
+                                                        </Button.ContentTemplate>
+                                                    </Button>
+                                                    <Button x:Name="BtnMoveDown" Content="Down" Click="BtnMoveDown_Click" Margin="0 5 0 0">
+                                                        <Button.ContentTemplate>
+                                                            <DataTemplate>
+                                                                <Image Source="/Images/arrow_down.png"/>
+                                                            </DataTemplate>
+                                                        </Button.ContentTemplate>
+                                                    </Button>
+                                                    <TextBlock Text="Lower" Margin="0 10 0 0"/>
+                                                </StackPanel>
+                                                <ListBox Name="PrioritiesListBox" Foreground="Black" MinWidth="210" IsSynchronizedWithCurrentItem="True" VerticalAlignment="Center" 
+                                                 ItemsSource="{Binding MovieSheetsOptions.MovieInfoPriorities}" SelectionChanged="PrioritiesListBox_SelectionChanged" >
+                                                    <ListBox.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock Margin="3">
+                                                                <TextBlock.Style>
+                                                                    <Style>
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding}" Value="MyOwn">
+                                                                                <Setter Property="TextBlock.Text" Value="My own info (from .nfo file)"/>
+                                                                            </DataTrigger>
+                                                                            <DataTrigger Binding="{Binding}" Value="Metadata">
+                                                                                <Setter Property="TextBlock.Text" Value="Metadata movie info (from .tgmd file)"/>
+                                                                            </DataTrigger>
+                                                                            <DataTrigger Binding="{Binding}" Value="PrefCollector">
+                                                                                <Setter Property="TextBlock.Text" Value="My preferred collector (chosen on main page)"/>
+                                                                            </DataTrigger>
+                                                                            <DataTrigger Binding="{Binding}" Value="IMDB">
+                                                                                <Setter Property="TextBlock.Text" Value="IMDb movie info"/>
+                                                                            </DataTrigger>
+                                                                            <DataTrigger Binding="{Binding}" Value="CurrentCollector">
+                                                                                <Setter Property="TextBlock.Text" Value="Selected collector (selected movie info)"/>
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </TextBlock.Style>
+                                                            </TextBlock>
+                                                        </DataTemplate>
+                                                    </ListBox.ItemTemplate>
+                                                </ListBox>
+                                            </StackPanel>
+                                            <CheckBox IsChecked="{Binding MovieSheetsOptions.DisablePreferredInfoCollector}" ToolTip="Recommended to disable the preferred collector if you don't use for a while.Will speed up processing time by skipping sending a request to it">
+                                                <TextBlock>
+                                                <Run>Disable preferred info collector</Run>
+                                                <Run FontSize="9">(recommended if you do not use it)</Run>
+                                                </TextBlock>
+                                            </CheckBox>
+                                        </StackPanel>
+                                    </GroupBox>
+                                    <GroupBox Margin="5" Style="{StaticResource GroupBoxStyle}" Header="Translate .nfo saved items to English">
+                                        <StackPanel Orientation="Vertical">
+                                            <CheckBox Content="Genre" IsChecked="{Binding Path=MovieSheetsOptions.AutotranslateGenre}" Margin="10"/>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+                                                <TextBlock Text="Powered by " VerticalAlignment="Center"/>
+                                                <Image VerticalAlignment="Center" Source="/Images/google.png" Height="23"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </GroupBox>
+
+                                </StackPanel>
+
+                                <GroupBox Margin="5" Style="{StaticResource GroupBoxStyle}" Header="Store cover/backdrops links into the movieinfo file">
+                                    <ComboBox x:Name="comboExportBackdropsType" Margin="5"
+                                              SelectedItem="{Binding NamingOptions.ExportBackdropType}" HorizontalAlignment="Left" MinWidth="250"/>
+                                </GroupBox>
+
+                            </StackPanel>
+                        </ScrollViewer>
+                    </TabItem>
+                    <TabItem x:Name="tabIMDbOptions" DataContext="{Binding IMDBOptions}" Header="IMDb Options">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            <StackPanel Orientation="Vertical">
+                                <GroupBox Header="IMDb movie info behaviour" Style="{StaticResource GroupBoxStyle}" Margin="5">
+                                    <GroupBox.Resources>
+                                        <ObjectDataProvider x:Key="IMDbBehaviours" MethodName="GetValues" ObjectType="{x:Type sys:Enum}" >
+                                            <ObjectDataProvider.MethodParameters>
+                                                <x:Type TypeName="local:IMDBMovieInfoBehaviour" />
+                                            </ObjectDataProvider.MethodParameters>
+                                        </ObjectDataProvider>
+
+                                        <Style x:Key="RadioButtonList" TargetType="{x:Type ListBox}">
+                                            <Setter Property="BorderBrush" Value="{x:Null}" />
+                                            <Setter Property="BorderThickness" Value="0" />
+                                            <Setter Property="ItemContainerStyle">
+                                                <Setter.Value>
+                                                    <Style TargetType="{x:Type ListBoxItem}" >
+                                                        <Setter Property="Margin" Value="2" />
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                                    <Border Background="Transparent">
+                                                                        <RadioButton Focusable="False" IsHitTestVisible="False" IsChecked="{TemplateBinding IsSelected}" Margin="5">
+                                                                            <RadioButton.Style>
+                                                                                <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}" >
+                                                                                    <Style.Triggers>
+                                                                                        <DataTrigger Binding="{Binding}" Value="DoNotUseIMDBMovieInfo">
+                                                                                            <Setter Property="RadioButton.Template">
+                                                                                                <Setter.Value>
+                                                                                                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                                                                                                        <RadioButton Content="Do not use movie info from IMDb to fill missing movie info items" IsChecked="{TemplateBinding IsChecked}"/>
+                                                                                                    </ControlTemplate>
+                                                                                                </Setter.Value>
+                                                                                            </Setter>
+                                                                                            <Setter Property="ToolTip"  Value="The IMDb movie info is displayed in the selection combobox but it is not used to replace anything inside the collector's movie info"/>
+                                                                                        </DataTrigger>
+                                                                                        <DataTrigger Binding="{Binding}" Value="FillMissingDataFromIMDB">
+                                                                                            <Setter Property="RadioButton.Template">
+                                                                                                <Setter.Value>
+                                                                                                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                                                                                                        <RadioButton Content="Use IMDb to fill missing movie info items (recommended)" IsChecked="{TemplateBinding IsChecked}"
+                                                                                                             ToolTip="If the movie info returned by the selected collector has missing data this will be filled with info from IMDb"/>
+                                                                                                    </ControlTemplate>
+                                                                                                </Setter.Value>
+                                                                                            </Setter>
+                                                                                        </DataTrigger>
+                                                                                        <DataTrigger Binding="{Binding}" Value="UseOnlyIMDBMovieInfo">
+                                                                                            <Setter Property="RadioButton.Template">
+                                                                                                <Setter.Value>
+                                                                                                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                                                                                                        <RadioButton Content="Discard existing movie info and always use the complete IMDB movie info" IsChecked="{TemplateBinding IsChecked}"
+                                                                                                             ToolTip="The Movie Info returned by the Collector is replaced completely with IMDb Movie Info"/>
+                                                                                                    </ControlTemplate>
+                                                                                                </Setter.Value>
+                                                                                            </Setter>
+                                                                                        </DataTrigger>
+                                                                                    </Style.Triggers>
+                                                                                </Style>
+                                                                            </RadioButton.Style>
+                                                                            <!--<ContentPresenter />-->
+                                                                        </RadioButton>
+                                                                    </Border>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </GroupBox.Resources>
+                                    <StackPanel Orientation="Vertical">
+                                        <ListBox Name="IMDbBehaviourSelector" Style="{StaticResource RadioButtonList}" ItemsSource="{Binding Source={StaticResource IMDbBehaviours}}" Margin="10"
+                                     SelectedValue="{Binding UsageBehaviour}" Background="Transparent"/>
+                                        <CheckBox Margin="15 15 0 0" IsChecked="{Binding AlwaysUseIMDbRating}" Content="Use always the IMDb rating"/>
+                                        <CheckBox Margin="15 10 0 0" IsChecked="{Binding AutofillIMDbIdForFirstMovieIfMissing}" Content="Auto fill user-selected IMDb Id for the first movie returned by a collector that does not support IMDb"/>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Header="IMDb movie preselect dialog" Style="{StaticResource GroupBoxStyle}" Margin="5">
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox x:Name="cbUsePreselect" Margin="15" Content="Use the preselect dialog with IMDb movies results (recommended)" VerticalAlignment="Center"
+                                              IsChecked="{Binding UseIMDbPreselectDialog}"/>
+                                        <TextBlock Margin="15" Text="Max returned results:" VerticalAlignment="Center" 
+                                               IsEnabled="{Binding ElementName=cbUsePreselect, Path=IsChecked}"/>
+                                        <TextBox Width="40" Text="{Binding MaxCountResults, FallbackValue=10}" VerticalAlignment="Center" 
+                                             IsEnabled="{Binding ElementName=cbUsePreselect, Path=IsChecked}"/>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Header="IMDb Country - Use 'International' in case of problems/performance issues" Style="{StaticResource GroupBoxStyle}" Margin="5">
+                                    <Grid Margin="10 10 5 0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock Text="Use IMDb website:" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Margin="5"/>
+                                        <ComboBox x:Name="cmbIMDBCountries" MinWidth="150" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" Margin="5"
+                                                  SelectedValue="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.IMDBOptions.Country}"
+                                                  SelectedValuePath="Key"
+                                                  DisplayMemberPath="Value" ItemsSource="{Binding Source={x:Static local:IMDbCountries.Countries}}"
+                                                  ToolTip="Set here the website from where the IMDb data will be retrieved" SelectionChanged="cmbIMDBCountries_SelectionChanged">
+                                        </ComboBox>
+                                        <TextBlock FontSize="9" Margin="5 0 0 0" Grid.Column="2" Grid.Row="0" VerticalAlignment="Center">
+                                                <Run>Missing items are filled up</Run>
+                                                <LineBreak/>
+                                                <Run>from International website</Run>
+                                        </TextBlock>
+                                        <CheckBox Margin="5 0 0 0" Grid.Column="3" IsChecked="{Binding UseFeelingLuckyMode}" Content="Use Feeling Lucky mode"
+                                                  VerticalAlignment="Center">
+                                            <CheckBox.Style>
+                                                <Style>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ElementName=cmbIMDBCountries,Path=SelectedIndex}" Value="0">
+                                                            <Setter Property="CheckBox.Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                    <Setter Property="CheckBox.Visibility" Value="Collapsed"/>
+                                                </Style>
+                                            </CheckBox.Style>
+                                        </CheckBox>
+
+                                        <TextBlock Text="Get Certification for:" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" Margin="5"/>
+                                        <ComboBox x:Name="cmbCertifs" MinWidth="150" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" Margin="5"
+                                                  SelectedValue="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.IMDBOptions.CertificationCountry}"
+                                                  SelectedValuePath="Key"
+                                                  DisplayMemberPath="Value" ItemsSource="{Binding Source={x:Static local:CountryCode.CountriesList}}"
+                                                  ToolTip="Set the Country for which the Certification should be returned" SelectionChanged="cmbIMDBCountries_SelectionChanged">
+                                        </ComboBox>
+                                        <TextBlock FontSize="9" Margin="5 0 0 0" Grid.Column="2" Grid.Row="1" VerticalAlignment="Center">
+                                                <Run>Missing certifications</Run>
+                                                <LineBreak/>
+                                                <Run>are filled up with USA ones</Run>
+                                        </TextBlock>
+
+                                    </Grid>
+                                </GroupBox>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </TabItem>
+                    <TabItem x:Name="tabAdvanced" Header="Input/Output Naming">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            <StackPanel Orientation="Vertical">
+                                <GroupBox Header="Input / Output Naming" Style="{StaticResource GroupBoxStyle}" Margin="5" DataContext="{Binding NamingOptions}">
+                                    <GroupBox.Resources>
+                                        <DataTemplate DataType="{x:Type local:PredefinedNames}" x:Key="ComboTemplate">
+                                            <StackPanel Orientation="Horizontal" ToolTip="{Binding Value.Tooltip}">
+                                                <TextBlock Text="{Binding Value.DisplayName}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </GroupBox.Resources>
+                                    <Grid Margin="5 10 0 0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="25"/>
+                                            <ColumnDefinition MinWidth="140"/>
+                                            <ColumnDefinition Width="120"/>
+                                            <ColumnDefinition MinWidth="55"/>
+                                            <ColumnDefinition Width="Auto" MinWidth="60" />
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <!-- thumbnail -->
+                                        <Image Grid.Column="0" Grid.Row="0" Source="/images/image.png" Width="16" Height="16" Margin="2" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                                        <TextBlock Grid.Column="1" Grid.Row="0" Margin="3 0 0 0" VerticalAlignment="Center" Text="Thumbnail"/>
+                                        <TextBox Grid.Column="2" Grid.Row="0" x:Name="tbThumbnail" Text="{Binding ThumbnailMask}" IsEnabled="True"/>
+                                        <ComboBox Grid.Column="3" Grid.Row="0" x:Name="cmbThumbnail" IsEnabled="True" SelectedItem="{Binding ThumbnailExtension}">
+                                            <sys:String>.jpg</sys:String>
+                                            <sys:String>.tbn</sys:String>
+                                            <sys:String>.metathumb</sys:String>
+                                        </ComboBox>
+                                        <StackPanel Grid.Column="4" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
+                                            <Button Content=" Default " Tag="1" Click="Default_Click" Visibility="Visible"/>
+                                        </StackPanel>
+
+                                        <!-- folder.jpg -->
+                                        <Image Grid.Column="0" Grid.Row="1" Source="/images/folder.png" Width="16" Height="16" Margin="2" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                                        <TextBlock Grid.Column="1" Grid.Row="1" Margin="3 0 0 0" VerticalAlignment="Center" Text="Extra thumbnail"/>
+                                        <TextBox Grid.Column="2" Grid.Row="1"  x:Name="tbFolderjpg" Text="{Binding FolderjpgMask}" VerticalAlignment="Center"/>
+                                        <ComboBox Grid.Column="3" Grid.Row="1" x:Name="cmbFolderjpg" IsEnabled="True" SelectedItem="{Binding FolderjpgExtension}">
+                                            <sys:String>.jpg</sys:String>
+                                            <sys:String>.tbn</sys:String>
+                                            <sys:String>.metathumb</sys:String>
+                                        </ComboBox>
+                                        <!--<Button Grid.Column="4" Grid.Row="1" Content="Default" Tag="2" Width="60" Click="Default_Click"/>-->
+                                        <StackPanel Grid.Column="4" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left">
+                                            <Button Content=" Default " Tag="2" Click="Default_Click"/>
+                                        </StackPanel>
+
+                                        <!-- movieinfo -->
+                                        <Image Grid.Column="0" Grid.Row="2" Source="/images/movie.png" Width="16" Height="16" Margin="2" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                                        <TextBlock Grid.Column="1" Grid.Row="2" Margin="3 0 0 0" VerticalAlignment="Center" Text="Movieinfo import"/>
+                                        <TextBox Grid.Column="2" Grid.Row="2" x:Name="tbMovieinfo" Text="{Binding MovieinfoMask}" IsEnabled="True" VerticalAlignment="Center"/>
+                                        <ComboBox Grid.Column="3" Grid.Row="2" x:Name="cmbMovieinfo" IsEnabled="True" 
+                                              ItemsSource="{x:Static local:NamingConventions.PredefinedInfoExtensions}"
+                                              SelectedItem="{Binding MovieinfoExtension}">
+
+                                        </ComboBox>
+                                        <StackPanel Grid.Column="4" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Left">
+                                            <Button Content=" Default " Tag="3" Click="Default_Click" Visibility="Visible"/>
+                                        </StackPanel>
+
+                                        <!-- movieinfo export  -->
+                                        <Image Grid.Column="0" Grid.Row="3" Source="/images/movie.png" Width="16" Height="16" Margin="2" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                                        <TextBlock Grid.Column="1" Grid.Row="3" Margin="3 0 0 0" VerticalAlignment="Center" Text="Movieinfo export"/>
+                                        <TextBox Grid.Column="2" Grid.Row="3" x:Name="tbMovieinfoExport" Text="{Binding MovieinfoExportMask}" IsEnabled="True" VerticalAlignment="Center"/>
+                                        <ComboBox Grid.Column="3" Grid.Row="3" x:Name="cmbMovieinfoExport" IsEnabled="True" 
+                                              ItemsSource="{x:Static local:NamingConventions.PredefinedInfoExtensions}"
+                                              SelectedItem="{Binding MovieinfoExportExtension}">
+
+                                        </ComboBox>
+                                        <StackPanel Grid.Column="4" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Left">
+                                            <Button Content=" Default " Tag="33" Click="Default_Click" Visibility="Visible" VerticalAlignment="Center"/>
+                                            <ComboBox x:Name="cmbNfoExportType">
+                                                <ComboBox.Items>
+                                                    <ComboBoxItem IsSelected="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.ExportNfoAsThumbGen, Mode=TwoWay}">
+                                                        <TextBlock ToolTip="If checked the format of the .nfo file will be the standard one used by ThumbGen" 
+                                                              VerticalAlignment="Center">Export using own ThumbGen format</TextBlock>
+                                                    </ComboBoxItem>
+                                                    <ComboBoxItem IsSelected="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.ExportNfoAsTvixie, Mode=TwoWay}">
+                                                        <TextBlock ToolTip="If checked the format of the .nfo file will be compatible with TViXiE (.tvixie)" 
+                                                              VerticalAlignment="Center">Export using TViXiE format</TextBlock>
+                                                    </ComboBoxItem>
+                                                    <ComboBoxItem IsSelected="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.ExportNfoAsXBMC, Mode=TwoWay}">
+                                                        <TextBlock ToolTip="If checked the format of the .nfo file will be compatible with XBMC format" 
+                                                              VerticalAlignment="Center">Export using XBMC format</TextBlock>
+                                                    </ComboBoxItem>
+                                                    <ComboBoxItem IsSelected="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.ExportNfoAsWDTVHUB, Mode=TwoWay}"
+                                                                  Tag="HUB">
+                                                        <TextBlock ToolTip="If checked the format of the .nfo file will be compatible with the WDTV Live Hub format" 
+                                                              VerticalAlignment="Center">Export using WDTV Live Hub format</TextBlock>
+                                                    </ComboBoxItem>
+                                                    <ComboBoxItem IsSelected="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.ExportNfoAsWDTVHUB_V2, Mode=TwoWay}"
+                                                                  Tag="HUB">
+                                                        <TextBlock ToolTip="If checked the format of the .nfo file will be compatible with the WDTV Live Hub format (TV Shows only)" 
+                                                              VerticalAlignment="Center">Export using WDTV Live Hub format (new fw)</TextBlock>
+                                                    </ComboBoxItem>
+                                                </ComboBox.Items>
+                                            </ComboBox>
+                                        </StackPanel>
+
+                                        <!-- moviesheet -->
+                                        <Image Grid.Column="0" Grid.Row="4" Source="/images/backdrop.png" Width="16" Height="16" Margin="2" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                                        <TextBlock Grid.Column="1" Grid.Row="4" Margin="3,3.362,0,3.362" Text="Main moviesheet" />
+                                        <TextBox Grid.Column="2" Grid.Row="4" x:Name="tbMoviesheet" Text="{Binding MoviesheetMask}" VerticalAlignment="Center" 
+                                             PreviewKeyDown="tbMoviesheet_PreviewKeyDown"/>
+                                        <ComboBox Grid.Column="3" Grid.Row="4" x:Name="cmbMoviesheet" IsEnabled="True" SelectedItem="{Binding MoviesheetExtension}">
+                                            <sys:String>.jpg</sys:String>
+                                            <sys:String>.png</sys:String>
+                                            <sys:String>.metathumb</sys:String>
+                                        </ComboBox>
+                                        <!--<Button Grid.Column="4" Grid.Row="3" Content="Default" Tag="4" Click="Default_Click"/>-->
+                                        <StackPanel Grid.Column="4" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Left">
+                                            <ComboBox ItemsSource="{x:Static local:NamingConventions.PredefinedNamesDict}" 
+                                                  SelectionChanged="MainMoviesheetCombo_SelectionChanged"
+                                                  SelectedValuePath="Key" x:Name="MainMoviesheetCombo" SelectedValue="{Binding SelectedPredefinedItem}"
+                                                  ItemTemplate="{StaticResource ComboTemplate}"/>
+                                        </StackPanel>
+                                        <TextBlock Grid.Column="4" Grid.ColumnSpan="10" Grid.Row="6" FontSize="9" Foreground="Navy" Margin="2"
+                                               Text="{Binding ElementName=MainMoviesheetCombo,Path=SelectedItem.Value.Tooltip}"/>
+
+                                        <!-- moviesheet for folder -->
+                                        <Image Grid.Column="0" Grid.Row="7" Source="/images/moviesheet_folder.png" Width="16" Height="16" Margin="2" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                                        <TextBlock Grid.Column="1" Grid.Row="7" Margin="3 0 0 0" VerticalAlignment="Center" Text="Extra moviesheet"/>
+                                        <TextBox Grid.Column="2" Grid.Row="7" x:Name="tbMoviesheetForFolder" Text="{Binding MoviesheetForFolderMask}" VerticalAlignment="Center" PreviewKeyDown="tbMoviesheetForFolder_PreviewKeyDown"/>
+                                        <ComboBox Grid.Column="3" Grid.Row="7" IsEnabled="True" SelectedItem="{Binding MoviesheetForFolderExtension}">
+                                            <sys:String>.jpg</sys:String>
+                                            <sys:String>.png</sys:String>
+                                            <sys:String>.metathumb</sys:String>
+                                        </ComboBox>
+                                        <StackPanel Grid.Column="4" Grid.Row="7" Orientation="Horizontal" HorizontalAlignment="Left" >
+                                            <ComboBox ItemsSource="{x:Static local:NamingConventions.PredefinedNamesDict}" ToolTip="{Binding Value.Tooltip}" 
+                                                  SelectionChanged="ExtraMoviesheetCombo_SelectionChanged"
+                                                  SelectedValuePath="Key" x:Name="ExtraMoviesheetCombo" SelectedValue="{Binding SelectedExtraPredefinedItem}"
+                                                  ItemTemplate="{StaticResource ComboTemplate}"/>
+                                        </StackPanel>
+                                        <TextBlock Grid.Column="4" Grid.ColumnSpan="10" Grid.Row="8" FontSize="9" Foreground="Navy" Margin="2"
+                                               Text="{Binding ElementName=ExtraMoviesheetCombo,Path=SelectedItem.Value.Tooltip}"/>
+
+                                        <!-- moviesheet for parent folder -->
+                                        <Image Grid.Column="0" Grid.Row="9" Source="/images/moviesheet_folder.png" Width="16" Height="16" Margin="2" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                                        <TextBlock Grid.Column="1" Grid.Row="9" Margin="3 0 0 0" VerticalAlignment="Center" Text="Spare moviesheet"/>
+                                        <TextBox Grid.Column="2" Grid.Row="9" x:Name="tbMoviesheetForParentFolder" Text="{Binding MoviesheetForParentFolderMask}" VerticalAlignment="Center"/>
+                                        <ComboBox Grid.Column="3" Grid.Row="9" IsEnabled="True" SelectedItem="{Binding MoviesheetForParentFolderExtension}">
+                                            <sys:String>.jpg</sys:String>
+                                            <sys:String>.png</sys:String>
+                                            <sys:String>.metathumb</sys:String>
+                                        </ComboBox>
+                                        <StackPanel Grid.Column="4" Grid.Row="9" Orientation="Horizontal" HorizontalAlignment="Left" >
+                                            <Button Content=" Default " Tag="9" Click="Default_Click"/>
+                                        </StackPanel>
+
+
+                                        <!-- moviesheetmetadata -->
+                                        <Image Grid.Column="0" Grid.Row="10" Source="/images/metadata.gif" Width="16" Height="16" Margin="2" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                                        <TextBlock Grid.Column="1" Grid.Row="10" Margin="3 0 0 0" VerticalAlignment="Center" Text="Main/Extra metadata"/>
+                                        <TextBox Grid.Column="2" Grid.Row="10" x:Name="tbMoviesheetMetadata" Text="{Binding MoviesheetMetadataMask}" VerticalAlignment="Center"/>
+                                        <ComboBox Grid.Column="3" Grid.Row="10" IsEnabled="False">
+                                            <ComboBoxItem Content=".tgmd" IsSelected="True"/>
+                                        </ComboBox>
+                                        <StackPanel Grid.Column="4" Grid.Row="10" Orientation="Horizontal" HorizontalAlignment="Left" >
+                                            <Button Content=" Default " Tag="6" Click="Default_Click"/>
+                                        </StackPanel>
+
+                                        <!-- parentfoldermetadata -->
+                                        <Image Grid.Column="0" Grid.Row="11" Source="/images/metadata.gif" Width="16" Height="16" Margin="2" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                                        <TextBlock Grid.Column="1" Grid.Row="11" Margin="3 0 0 0" VerticalAlignment="Center" Text="Spare metadata"/>
+                                        <TextBox Grid.Column="2" Grid.Row="11" x:Name="tbParentFolderMetadata" Text="{Binding ParentFolderMetadataMask}" VerticalAlignment="Center"/>
+                                        <ComboBox Grid.Column="3" Grid.Row="11" IsEnabled="False">
+                                            <ComboBoxItem Content=".tgmd" IsSelected="True"/>
+                                        </ComboBox>
+                                        <StackPanel Grid.Column="4" Grid.Row="11" Orientation="Horizontal" HorizontalAlignment="Left" >
+                                            <Button Content=" Default " Tag="9" Click="Default_Click"/>
+                                        </StackPanel>
+
+                                        <!-- dummy file -->
+                                        <CheckBox Content="Generate dummy file at " IsChecked="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.GenerateDummyFile, Mode=TwoWay}"
+                                                  VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="7 0 0 0" Grid.Row="12" Grid.Column="0" Grid.ColumnSpan="2"
+                                                  ToolTip="If checked a dummy movie file will be generated using the specified mask">
+                                            <!--<CheckBox.Style>
+                                                <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ElementName=cmbNfoExportType,Path=SelectedItem.Tag}" Value="HUB">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </Style>
+                                            </CheckBox.Style>-->
+                                        </CheckBox>
+                                        <TextBox Grid.Column="2" Grid.Row="12" x:Name="tbDummyFileMask" Text="{Binding DummyFileMask}" VerticalAlignment="Center"/>
+
+                                        <!-- info -->
+                                        <Image Grid.Column="0" Grid.Row="13" Grid.ColumnSpan="5" Source="/images/help_target.png" Width="200" Height="40" Margin="0 10 0 0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                                    </Grid>
+                                </GroupBox>
+                                <GroupBox Header="Test Tokens" Style="{StaticResource GroupBoxStyle}" Margin="5" DataContext="{Binding NamingOptions}">
+                                    <StackPanel Orientation="Vertical" Margin="5">
+                                        <StackPanel Orientation="Horizontal">
+                                            <local:FileSelectorControl Label="Choose file:" x:Name="fsMovieFile" Filter="All files (*.*)|*.*" Width="330" HorizontalAlignment="Left" AllowFolder="False" Margin="10"/>
+                                        </StackPanel>
+                                        <TextBlock x:Name="tokenM" Margin="10 0 10 0"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock x:Name="tokenP" Margin="10 0 10 0"/>
+                                            <TextBlock x:Name="tokenF" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock x:Name="tokenN" Margin="10 0 10 0"/>
+                                            <TextBlock x:Name="tokenE" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </GroupBox>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </TabItem>
+                    <TabItem x:Name="tabImport" Header="Collectors Settings">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            <StackPanel Orientation="Vertical">
+                                <GroupBox Header="ANT Movie Catalog" Style="{StaticResource GroupBoxStyle}" Margin="5" >
+                                    <StackPanel Orientation="Horizontal">
+                                        <local:FileSelectorControl x:Name="fsANT" Filter="XML files (*.xml)|*.xml" Width="400" HorizontalAlignment="Left" Label="XML File:" AllowFolder="False" Margin="10"
+                                                               Filepath="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.ImportOptions.ANTXML, Mode=TwoWay}"/>
+                                        <CheckBox Margin="10 2 5 2" ToolTip="If checked the ANT movie number is expected at the beginning of the filename" VerticalAlignment="Center"
+                                              IsChecked="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.ImportOptions.ANTUseCustomSearch, Mode=TwoWay}">Movie number at the beginning of the filename</CheckBox>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Header="Collectorz.com Movie Collector" Style="{StaticResource GroupBoxStyle}" Margin="5" >
+                                    <local:FileSelectorControl x:Name="fsCollectorz" Filter="XML files (*.xml)|*.xml" Width="400" HorizontalAlignment="Left" Label="XML File:" AllowFolder="False" Margin="10"
+                                                               Filepath="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.ImportOptions.CollectorzXML, Mode=TwoWay}"/>
+                                </GroupBox>
+                                <GroupBox Header="Cine-Passion Movie Collector" Style="{StaticResource GroupBoxStyle}" Margin="5" >
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                        <TextBox MinWidth="120" Style="{StaticResource TextBoxUserStyle}" Tag="Username"
+                                                 Text="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.CinePassionOptions.Username, Mode=TwoWay}"/>
+                                        <PasswordBox Style="{StaticResource PasswordBoxVistaStyle}"
+                                                     local:PasswordBoxAssistant.BoundPassword="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.CinePassionOptions.Pass, Mode=TwoWay}"/>
+                                    </StackPanel>
+                                </GroupBox>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </TabItem>
+                    <TabItem x:Name="tabImportImages" Header="Import Images">
+                        <GroupBox Header="Autoselect existing images (accepts same tokens as output naming convention)" Style="{StaticResource GroupBoxStyle}" Margin="5">
+                            <StackPanel Orientation="Vertical" Margin="10">
+                                <local:AutoselectImage ToolTip="If checked and the specified file is found near the movie it will be used as the default cover"
+                                                           PrefixText="Autoselect existing" TargetText=" as cover" 
+                                                           Filename="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.MovieSheetsOptions.AutoSelectFolderjpgAsCoverName,Mode=TwoWay}"
+                                                           Autoselect="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.MovieSheetsOptions.AutoSelectFolderjpgAsCover,Mode=TwoWay}" Margin="10 2"/>
+                                <local:AutoselectImage ToolTip="If checked and the specified file is found near the movie it will be used as the default background"
+                                                           PrefixText="Autoselect existing" TargetText=" as background" 
+                                                           Filename="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.MovieSheetsOptions.AutoSelectFanartjpgAsBackgroundName,Mode=TwoWay}"
+                                                           Autoselect="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.MovieSheetsOptions.AutoSelectFanartjpgAsBackground,Mode=TwoWay}" Margin="10 2"/>
+                                <local:AutoselectImage ToolTip="If checked and the specified file is found near the movie it will be used as the default fanart1"
+                                                           PrefixText="Autoselect existing" TargetText=" as fanart1" 
+                                                           Filename="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.MovieSheetsOptions.AutoSelectFanart1jpgAsBackgroundName,Mode=TwoWay}"
+                                                           Autoselect="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.MovieSheetsOptions.AutoSelectFanart1jpgAsBackground,Mode=TwoWay}" Margin="10 2"/>
+                                <local:AutoselectImage ToolTip="If checked and the specified file is found near the movie it will be used as the default fanart2"
+                                                           PrefixText="Autoselect existing" TargetText=" as fanart2" 
+                                                           Filename="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.MovieSheetsOptions.AutoSelectFanart2jpgAsBackgroundName,Mode=TwoWay}"
+                                                           Autoselect="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.MovieSheetsOptions.AutoSelectFanart2jpgAsBackground,Mode=TwoWay}" Margin="10 2"/>
+                                <local:AutoselectImage ToolTip="If checked and the specified file is found near the movie it will be used as the default fanart3"
+                                                           PrefixText="Autoselect existing" TargetText=" as fanart3" 
+                                                           Filename="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.MovieSheetsOptions.AutoSelectFanart3jpgAsBackgroundName,Mode=TwoWay}"
+                                                           Autoselect="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.MovieSheetsOptions.AutoSelectFanart3jpgAsBackground,Mode=TwoWay}" Margin="10 2"/>
+                                <CheckBox IsChecked="{Binding MovieSheetsOptions.AutopopulateFromMetadata}" Content="Autoselect all images from metadata (if available)" Margin="10 15 0 0"
+                                                            ToolTip="If checked and metadata file is found then its images will be used to populate the sheet by default" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </GroupBox>
+                    </TabItem>
+                    <TabItem x:Name="tabExportImages" Header="Export Images">
+
+                        <GroupBox Header="Export selected images (accepts same tokens as output naming convention)" Style="{StaticResource GroupBoxStyle}" Margin="5"
+                                  DataContext="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.ExportImagesOptions}">
+                            <WrapPanel ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="10">
+                                <GroupBox Header="Cover / Poster" Style="{StaticResource GroupBoxStyle}" Margin="5">
+                                    <StackPanel Orientation="Vertical"
+                                                DataContext="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.ExportImagesOptions}">
+                                        <local:AutoselectImage ToolTip="If checked the selected cover is exported using the specified filename"
+                                                           PrefixText="Export cover to" TargetText="" x:Name="asiCover"
+                                                           Filename="{Binding Path=AutoExportFolderjpgAsCoverName,Mode=TwoWay}"
+                                                           Autoselect="{Binding Path=AutoExportFolderjpgAsCover,Mode=TwoWay}" Margin="3"
+                                                           Extension="{Binding Path=CoverExtension,Mode=TwoWay}"
+                                                           IsExtensionVisible="True"/>
+                                        <CheckBox Content="Overwrite existing" IsChecked="{Binding Path=OverwriteExistingCover,Mode=TwoWay}"
+                                                  Margin="3" ToolTip="If checked and the file already exists it will be overwriten" IsEnabled="{Binding ElementName=asiCover, Path=Autoselect}"/>
+                                        <CheckBox Content="Preserve Aspect Ratio" IsChecked="{Binding Path=PreserveAspectRatioCover,Mode=TwoWay}"
+                                                  Margin="3" ToolTip="If checked the resulted image will preserve the original aspect ratio" IsEnabled="{Binding ElementName=asiCover, Path=Autoselect}"/>
+                                        <local:ImageSizeControl IsResizing="{Binding Path=IsResizingCover,Mode=TwoWay}"
+                                                                WidthPx="{Binding Path=CoverSizeWidth, Mode=TwoWay}"
+                                                                HeightPx="{Binding Path=CoverSizeHeight, Mode=TwoWay}" Margin="3"
+                                                                    IsEnabled="{Binding ElementName=asiCover, Path=Autoselect}"/>
+                                        <local:MaxFilesizeControl IsMaxQuality="{Binding Path=IsMaxQuality, Mode=TwoWay}"
+                                                                  LimitBytes="{Binding Path=MaxFilesize, Mode=TwoWay}"
+                                                                  HorizontalAlignment="Left" Margin="2" IsEnabled="{Binding ElementName=asiCover, Path=Autoselect}"/>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Header="Background" Style="{StaticResource GroupBoxStyle}" Margin="5"
+                                          DataContext="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.ExportImagesOptions}">
+                                    <StackPanel Orientation="Vertical">
+                                        <local:AutoselectImage ToolTip="If checked the selected background is exported using the specified filename"
+                                                           PrefixText="Export image to" TargetText="" x:Name="asiBackground"
+                                                           Filename="{Binding Path=AutoExportFanartjpgAsBackgroundName,Mode=TwoWay}"
+                                                           Autoselect="{Binding Path=AutoExportFanartjpgAsBackground,Mode=TwoWay}" Margin="3"
+                                                           Extension="{Binding Path=BackgroundExtension,Mode=TwoWay}"
+                                                           IsExtensionVisible="True"/>
+                                        <CheckBox Content="Overwrite existing" IsChecked="{Binding Path=OverwriteExistingBackground,Mode=TwoWay}"
+                                                  Margin="3" ToolTip="If checked and the file already exists it will be overwriten" IsEnabled="{Binding ElementName=asiBackground, Path=Autoselect}"/>
+                                        <CheckBox Content="Preserve Aspect Ratio" IsChecked="{Binding Path=PreserveAspectRatioBackground,Mode=TwoWay}"
+                                                  Margin="3" ToolTip="If checked the resulted image will preserve the original aspect ratio" IsEnabled="{Binding ElementName=asiBackground, Path=Autoselect}"/>
+                                        <local:ImageSizeControl IsResizing="{Binding Path=IsResizingBackground,Mode=TwoWay}"
+                                                                WidthPx="{Binding Path=BackgroundSizeWidth, Mode=TwoWay}"
+                                                                HeightPx="{Binding Path=BackgroundSizeHeight, Mode=TwoWay}" Margin="3"
+                                                                IsEnabled="{Binding ElementName=asiBackground, Path=Autoselect}"/>
+                                        <local:MaxFilesizeControl IsMaxQuality="{Binding Path=IsMaxQualityBackground, Mode=TwoWay}"
+                                                                  LimitBytes="{Binding Path=MaxFilesizeBackground, Mode=TwoWay}"
+                                                                  HorizontalAlignment="Left" Margin="2" IsEnabled="{Binding ElementName=asiBackground, Path=Autoselect}"/>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Header="Fanart 1" Style="{StaticResource GroupBoxStyle}" Margin="5"
+                                          DataContext="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.ExportImagesOptions}">
+                                    <StackPanel Orientation="Vertical">
+                                        <local:AutoselectImage ToolTip="If checked the selected fanart 1 is exported using the specified filename"
+                                                           PrefixText="Export image to" TargetText="" x:Name="asiFanart1"
+                                                           Filename="{Binding Path=AutoExportFanart1jpgAsBackgroundName,Mode=TwoWay}"
+                                                           Autoselect="{Binding Path=AutoExportFanart1jpgAsBackground,Mode=TwoWay}" Margin="3"
+                                                           Extension="{Binding Path=Fanart1Extension,Mode=TwoWay}"
+                                                           IsExtensionVisible="True"/>
+                                        <CheckBox Content="Overwrite existing" IsChecked="{Binding Path=OverwriteExistingFanart1,Mode=TwoWay}"
+                                                  Margin="3" ToolTip="If checked and the file already exists it will be overwriten" IsEnabled="{Binding ElementName=asiFanart1, Path=Autoselect}"/>
+                                        <CheckBox Content="Preserve Aspect Ratio" IsChecked="{Binding Path=PreserveAspectRatioFanart1,Mode=TwoWay}"
+                                                  Margin="3" ToolTip="If checked the resulted image will preserve the original aspect ratio" IsEnabled="{Binding ElementName=asiFanart1, Path=Autoselect}"/>
+                                        <local:ImageSizeControl IsResizing="{Binding Path=IsResizingFanart1,Mode=TwoWay}"
+                                                                WidthPx="{Binding Path=Fanart1SizeWidth, Mode=TwoWay}"
+                                                                HeightPx="{Binding Path=Fanart1SizeHeight, Mode=TwoWay}" Margin="3"
+                                                                IsEnabled="{Binding ElementName=asiFanart1, Path=Autoselect}"/>
+                                        <local:MaxFilesizeControl IsMaxQuality="{Binding Path=IsMaxQualityFanart1, Mode=TwoWay}"
+                                                                  LimitBytes="{Binding Path=MaxFilesizeFanart1, Mode=TwoWay}"
+                                                                  HorizontalAlignment="Left" Margin="2" IsEnabled="{Binding ElementName=asiFanart1, Path=Autoselect}"/>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Header="Fanart 2" Style="{StaticResource GroupBoxStyle}" Margin="5"
+                                          DataContext="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.ExportImagesOptions}">
+                                    <StackPanel Orientation="Vertical">
+                                        <local:AutoselectImage ToolTip="If checked the selected fanart 2 is exported using the specified filename"
+                                                           PrefixText="Export image to" TargetText="" x:Name="asiFanart2"
+                                                           Filename="{Binding Path=AutoExportFanart2jpgAsBackgroundName,Mode=TwoWay}"
+                                                           Autoselect="{Binding Path=AutoExportFanart2jpgAsBackground,Mode=TwoWay}" Margin="3"
+                                                           Extension="{Binding Path=Fanart2Extension,Mode=TwoWay}"
+                                                           IsExtensionVisible="True"/>
+                                        <CheckBox Content="Overwrite existing" IsChecked="{Binding Path=OverwriteExistingFanart2,Mode=TwoWay}"
+                                                  Margin="3" ToolTip="If checked and the file already exists it will be overwriten" IsEnabled="{Binding ElementName=asiFanart2, Path=Autoselect}"/>
+                                        <CheckBox Content="Preserve Aspect Ratio" IsChecked="{Binding Path=PreserveAspectRatioFanart2,Mode=TwoWay}"
+                                                  Margin="3" ToolTip="If checked the resulted image will preserve the original aspect ratio" IsEnabled="{Binding ElementName=asiFanart2, Path=Autoselect}"/>
+                                        <local:ImageSizeControl IsResizing="{Binding Path=IsResizingFanart2,Mode=TwoWay}"
+                                                                WidthPx="{Binding Path=Fanart2SizeWidth, Mode=TwoWay}"
+                                                                HeightPx="{Binding Path=Fanart2SizeHeight, Mode=TwoWay}" Margin="3"
+                                                                    IsEnabled="{Binding ElementName=asiFanart2, Path=Autoselect}"/>
+                                        <local:MaxFilesizeControl IsMaxQuality="{Binding Path=IsMaxQualityFanart2, Mode=TwoWay}"
+                                                                  LimitBytes="{Binding Path=MaxFilesizeFanart2, Mode=TwoWay}"
+                                                                  HorizontalAlignment="Left" Margin="2" IsEnabled="{Binding ElementName=asiFanart2, Path=Autoselect}"/>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Header="Fanart 3" Style="{StaticResource GroupBoxStyle}" Margin="5"
+                                          DataContext="{Binding Source={x:Static local:FileManager.Configuration}, Path=Options.ExportImagesOptions}">
+                                    <StackPanel Orientation="Vertical">
+                                        <local:AutoselectImage ToolTip="If checked the selected fanart 3 is exported using the specified filename"
+                                                           PrefixText="Export image to" TargetText="" x:Name="asiFanart3"
+                                                           Filename="{Binding Path=AutoExportFanart3jpgAsBackgroundName,Mode=TwoWay}"
+                                                           Autoselect="{Binding Path=AutoExportFanart3jpgAsBackground,Mode=TwoWay}" Margin="3"
+                                                           Extension="{Binding Path=Fanart3Extension,Mode=TwoWay}"
+                                                           IsExtensionVisible="True"/>
+                                        <CheckBox Content="Overwrite existing" IsChecked="{Binding Path=OverwriteExistingFanart3,Mode=TwoWay}"
+                                                  Margin="3" ToolTip="If checked and the file already exists it will be overwriten" IsEnabled="{Binding ElementName=asiFanart3, Path=Autoselect}"/>
+                                        <CheckBox Content="Preserve Aspect Ratio" IsChecked="{Binding Path=PreserveAspectRatioFanart3,Mode=TwoWay}"
+                                                  Margin="3" ToolTip="If checked the resulted image will preserve the original aspect ratio" IsEnabled="{Binding ElementName=asiFanart3, Path=Autoselect}"/>
+                                        <local:ImageSizeControl IsResizing="{Binding Path=IsResizingFanart3,Mode=TwoWay}"
+                                                                WidthPx="{Binding Path=Fanart3SizeWidth, Mode=TwoWay}"
+                                                                HeightPx="{Binding Path=Fanart3SizeHeight, Mode=TwoWay}" Margin="3"
+                                                                    IsEnabled="{Binding ElementName=asiFanart3, Path=Autoselect}"/>
+                                        <local:MaxFilesizeControl IsMaxQuality="{Binding Path=IsMaxQualityFanart3, Mode=TwoWay}"
+                                                                  LimitBytes="{Binding Path=MaxFilesizeFanart3, Mode=TwoWay}"
+                                                                  HorizontalAlignment="Left" Margin="2" IsEnabled="{Binding ElementName=asiFanart3, Path=Autoselect}"/>
+                                    </StackPanel>
+                                </GroupBox>
+                            </WrapPanel>
+                        </GroupBox>
+
+                    </TabItem>
+                    <TabItem x:Name="tabOverscan" Header="Overscan Correction">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal" Margin="10 10 0 0" VerticalAlignment="Top" >
+                                <TextBlock Text="Apply Correction" Margin="0" VerticalAlignment="Center" FontWeight="DemiBold"/>
+                                <TextBlock Text="Left:" Margin="5 0 0 0" VerticalAlignment="Center"/>
+                                <TextBox Text="{Binding MovieSheetsOptions.OverscanLeft, FallbackValue=0}" Margin="3 0 0 0" VerticalAlignment="Center" Width="20"/>
+                                <TextBlock Text="Top:" Margin="5 0 0 0" VerticalAlignment="Center"/>
+                                <TextBox Text="{Binding MovieSheetsOptions.OverscanTop, FallbackValue=0}" Margin="3 0 0 0" VerticalAlignment="Center" Width="20"/>
+                                <TextBlock Text="Right:" Margin="5 0 0 0" VerticalAlignment="Center"/>
+                                <TextBox Text="{Binding MovieSheetsOptions.OverscanRight, FallbackValue=0}" Margin="3 0 0 0" VerticalAlignment="Center" Width="20"/>
+                                <TextBlock Text="Bottom:" Margin="5 0 0 0" VerticalAlignment="Center"/>
+                                <TextBox Text="{Binding MovieSheetsOptions.OverscanBottom, FallbackValue=0}" Margin="3 0 0 0" VerticalAlignment="Center" Width="20"/>
+                            </StackPanel>
+                            <CheckBox Content="Apply overscan correction to the Main sheet" IsChecked="{Binding Path=MovieSheetsOptions.ApplyOverscanMain,Mode=TwoWay}"
+                                      Margin="10 10 5 5" ToolTip="If checked then the overscan correction will be applied to the main sheet"/>
+                            <CheckBox Content="Apply overscan correction to the Extra sheet" IsChecked="{Binding Path=MovieSheetsOptions.ApplyOverscanExtra,Mode=TwoWay}"
+                                      Margin="10 5 5 5" ToolTip="If checked then the overscan correction will be applied to the extra sheet"/>
+                            <CheckBox Content="Apply overscan correction to the Spare sheet" IsChecked="{Binding Path=MovieSheetsOptions.ApplyOverscanSpare,Mode=TwoWay}"
+                                      Margin="10 5 5 5" ToolTip="If checked then the overscan correction will be applied to the spare sheet"/>
+                        </StackPanel>
+                    </TabItem>
+                    <TabItem x:Name="tabConnectionSettings" DataContext="{Binding ConnectionOptions}" Header="Internet Connection">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            <GroupBox Header="Proxy Settings" Style="{StaticResource GroupBoxStyle}" Margin="5">
+                                <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="10">
+                                    <RadioButton x:Name="rbUseIE" Margin="10" 
+                                         IsChecked="{Binding Type,Converter={StaticResource ConnectionToBoolConverter}, ConverterParameter=UseIE, Mode=TwoWay}">Use Internet Explorer settings</RadioButton>
+                                    <RadioButton x:Name="rbDirect" Margin="10"
+                                         IsChecked="{Binding Type,Converter={StaticResource ConnectionToBoolConverter}, ConverterParameter=Direct, Mode=TwoWay}">Use direct connection (default)</RadioButton>
+                                    <RadioButton x:Name="rbUseProxy" Margin="10"
+                                         IsChecked="{Binding Type,Converter={StaticResource ConnectionToBoolConverter}, ConverterParameter=Proxy, Mode=TwoWay}">Use Proxy</RadioButton>
+                                    <Grid x:Name="grdProxy" Visibility="{Binding ElementName=rbUseProxy,Path=IsChecked,Mode=OneWay,Converter={StaticResource Bool2VisibConverter}}">
+                                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                                <TextBox MinWidth="120" Style="{StaticResource TextBoxUserStyle}" Tag="Host"
+                                                 Text="{Binding ProxyHost, Mode=TwoWay}"/>
+                                                <TextBox MinWidth="40" Style="{StaticResource TextBoxUserStyle}" Tag="Port" MaxWidth="50"
+                                                 Text="{Binding ProxyPort, Mode=TwoWay}"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                                <TextBox MinWidth="120" Style="{StaticResource TextBoxUserStyle}" Tag="Username"
+                                                 Text="{Binding ProxyUser, Mode=TwoWay}"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                                <PasswordBox Style="{StaticResource PasswordBoxVistaStyle}"
+                                                     local:PasswordBoxAssistant.BoundPassword="{Binding ProxyPass,Mode=TwoWay}"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+                            </GroupBox>
+                        </ScrollViewer>
+                    </TabItem>
+                    <TabItem x:Name="tabSSHSettings"  Header="Telnet/SSH">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            <StackPanel Orientation="Horizontal">
+                                <GroupBox Header="Telnet Connection Settings" Style="{StaticResource GroupBoxStyle}" Margin="5" DataContext="{Binding TelnetOptions}">
+                                    <Grid x:Name="grdSSH">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="Host/IP:" VerticalAlignment="Center"/>
+                                        <TextBox MinWidth="120" Style="{StaticResource TextBoxUserStyle}" Tag="Host/IP"
+                                                 Text="{Binding TelnetHost, Mode=TwoWay}" Grid.Column="1"/>
+
+                                        <TextBlock Text="Port:" VerticalAlignment="Center" Grid.Row="1"/>
+                                        <TextBox MinWidth="60" Style="{StaticResource TextBoxUserStyle}" Tag="Port"
+                                                 Text="{Binding TelnetPort, Mode=TwoWay}" Grid.Column="1" Grid.Row="1"/>
+
+                                        <TextBlock Text="Username:" VerticalAlignment="Center" Grid.Row="2"/>
+                                        <TextBox MinWidth="120" Style="{StaticResource TextBoxUserStyle}" Tag="Username"
+                                                 Text="{Binding TelnetUser, Mode=TwoWay}" Grid.Row="2" Grid.Column="1"/>
+
+                                        <TextBlock Text="Password:" VerticalAlignment="Center" Grid.Row="3"/>
+                                        <PasswordBox Style="{StaticResource PasswordBoxVistaStyle}" Grid.Row="3" Grid.Column="1"
+                                                     local:PasswordBoxAssistant.BoundPassword="{Binding TelnetPass,Mode=TwoWay}"/>
+                                        <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.ColumnSpan="2">
+                                            <Button x:Name="btnChangeTelnetPass" Content="Change Password" Margin="3" Click="btnChangeTelnetPass_Click"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </GroupBox>
+                                <GroupBox Header="SSH Connection Settings" Style="{StaticResource GroupBoxStyle}" Margin="5" DataContext="{Binding SSHOptions}">
+                                    <Grid x:Name="grdTelnet">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="Host/IP:" VerticalAlignment="Center"/>
+                                        <TextBox MinWidth="120" Style="{StaticResource TextBoxUserStyle}" Tag="Host/IP"
+                                                 Text="{Binding SSHHost, Mode=TwoWay}" Grid.Column="1"/>
+
+                                        <TextBlock Text="Port:" VerticalAlignment="Center" Grid.Row="1"/>
+                                        <TextBox MinWidth="60" Style="{StaticResource TextBoxUserStyle}" Tag="Port"
+                                                 Text="{Binding SSHPort, Mode=TwoWay}" Grid.Column="1" Grid.Row="1"/>
+
+                                        <TextBlock Text="Username:" VerticalAlignment="Center" Grid.Row="2"/>
+                                        <TextBox MinWidth="120" Style="{StaticResource TextBoxUserStyle}" Tag="Username"
+                                                 Text="{Binding SSHUser, Mode=TwoWay}" Grid.Row="2" Grid.Column="1"/>
+
+                                        <TextBlock Text="Password:" VerticalAlignment="Center" Grid.Row="3"/>
+                                        <PasswordBox Style="{StaticResource PasswordBoxVistaStyle}" Grid.Row="3" Grid.Column="1"
+                                                     local:PasswordBoxAssistant.BoundPassword="{Binding SSHPass,Mode=TwoWay}"/>
+                                    </Grid>
+                                </GroupBox>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </TabItem>
+                    <TabItem x:Name="tabAdvancedSettings" Header="Advanced Settings">
+                        <StackPanel Orientation="Vertical">
+                            <GroupBox Header="Use also the following extensions as 'movies' (comma separated: .rar,.zip)" Style="{StaticResource GroupBoxStyle}" Margin="5">
+                                <TextBox Text="{Binding CustomMovieExtensions,FallbackValue={x:Null}}" Margin="5" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                            </GroupBox>
+                            <StackPanel Orientation="Vertical">
+                                <GroupBox Header="Skip folders/files having in their names (comma separated: sample,trailer)" Style="{StaticResource GroupBoxStyle}" Margin="5">
+                                    <TextBox Text="{Binding SkipFoldersHavingStrings,FallbackValue={x:Null}}" Margin="5" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                                </GroupBox>
+                                <TextBlock Text="AND" Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                <GroupBox Header="Skip folders/files matching this expression" Style="{StaticResource GroupBoxStyle}" Margin="5">
+                                    <TextBox Text="{Binding UserDefinedFilesFilter,FallbackValue={x:Null}}" Margin="5" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                                </GroupBox>
+                                <CheckBox Margin="15 15 0 0" ToolTip="If checked the program tries to filter the files from a BluRay folder structure (choosing the biggest m2ts file)"
+                                              IsChecked="{Binding FileBrowserOptions.UseBRayFilter}" VerticalAlignment="Center">Use BluRay filter</CheckBox>
+                                <CheckBox Margin="15 5 0 15" ToolTip="If checked the program will calculate the output location as relative to the top folder of the structure"
+                                              IsChecked="{Binding EnableSmartOutputForDVDBRAY}" VerticalAlignment="Center">Enable smart output for DVD/BluRay structures</CheckBox>
+                                <CheckBox Margin="15 15 0 0" ToolTip="If checked the media info will not be extracted/processed at all"
+                                              IsChecked="{Binding DisableMediaInfoProcessing}" VerticalAlignment="Center">Disable MediaInfo processing</CheckBox>
+                            </StackPanel>
+                            <GroupBox Header="Reset to default settings" Style="{StaticResource GroupBoxStyle}" Margin="5">
+                                <Button Content="Reset settings" x:Name="ResetAllButton" Click="ResetAllButton_Click" Width="75" HorizontalAlignment="Left" Margin="5"/>
+                            </GroupBox>
+                            <CheckBox Margin="10" ToolTip="If checked the program checks at startup if there's a new version available"
+                                              IsChecked="{Binding AutoCheckUpdates}" VerticalAlignment="Center">Check for updates at startup</CheckBox>
+                        </StackPanel>
+                    </TabItem>
+                </TabControl>
+
+                <StackPanel Grid.Row="1" Margin="10" Orientation="Vertical">
+                    <Button Content="OK" x:Name="OKButton" Height="25"  IsDefault="True" MinWidth="75" Click="OKButton_Click" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Border>
+</Window>

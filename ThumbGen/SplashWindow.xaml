@@ -1,0 +1,35 @@
+﻿<Window x:Class="ThumbGen.SplashWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:ThumbGen"
+        xmlns:core="clr-namespace:ThumbGen.Core;assembly=ThumbGen.Core"
+        Title="SplashWindow" Width="498" Height="371" Focusable="False"
+        WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize" ShowInTaskbar="False">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="Bool2VisibConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Border BorderBrush="Black" BorderThickness="1">
+            <Image Source="/Images/splash.jpg" Stretch="Fill"/>
+        </Border>
+        <TextBlock Margin="0 0 40 60" x:Name="version" Text="{Binding Source={x:Static core:VersionNumber.LongVersion}, StringFormat=v\{0\}}" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10 0 0 10" VerticalAlignment="Bottom"
+                    Visibility="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}},Path=IsAbout,Converter={StaticResource Bool2VisibConverter}}">
+            <TextBlock  ToolTip="Visit the website periodically for news and updates" x:Name="AboutText"  VerticalAlignment="Center"
+                   Visibility="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}},Path=IsAbout,Converter={StaticResource Bool2VisibConverter}}">
+                    <Hyperlink NavigateUri="http://thumbgen.org" local:HyperlinkController.NavigatesToUrl="True">http://thumbgen.org</Hyperlink>
+            </TextBlock>
+            <Button x:Name="TwitterButton" Click="Twitter_Click"  VerticalAlignment="Center" Margin="10 0 0 0" Cursor="Hand" >
+                <Button.Template>
+                    <ControlTemplate>
+                        <Image Source="/images/twitter.png" Margin="0 0 3 0" VerticalAlignment="Center" Width="61" Height="23"/>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </StackPanel>
+
+        <Button IsCancel="True" Visibility="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}},Path=IsAbout,Converter={StaticResource Bool2VisibConverter}}"
+                Content="OK" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 10 10" MinWidth="75"/>
+    </Grid>
+</Window>

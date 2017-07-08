@@ -1,0 +1,44 @@
+<!-- if the scripts.xml file is not found at startup then a default one is created -->
+<scripts>
+  <!-- script node is mapped automatically to a new button in the Tools ribbon group (will get a default icon for now) -->
+  <!-- name attribute will be the name of the button and description will be the tooltip -->
+  <script name="Choose SHEET Mode" description="On WDTV devices it switches to SHEET mode for moviesheets">
+    <!-- command node is keeping together the individual commands that need to be executed for the current script -->
+    <!-- command node must be alone under script (it is just logically grouping lines); multiple command nodes are ignored -->
+    <!-- the prompt attribute is very important and it defines the prompt returned by the server; it is used to sync send/receive -->
+    <!-- the method attribute defines the method used to send the command; can be ssh or telnet; default value is ssh -->
+    <command prompt="#" method="ssh">
+      <!-- a line node contains an individual command to be sent to the server -->
+      <line>config_tool -c SHOW_FILESIZE_SETTING=0</line>
+      <line>config_tool -c VIDMSHEET=ON</line>
+      <line>config_tool -c GENMSHEET=ON</line>
+      <line>config_tool -c LISTMSHEET=ON</line>
+      <line>config_tool -c MSHEETMODE=sheet</line>
+      <line>config_tool -s</line>
+      <!-- use &amp;&amp; to link together multiple commands in one line; the reboot command is not waiting for the prompt -->
+      <line>sync &amp;&amp; sync &amp;&amp; reboot -f</line>
+    </command>
+  </script>
+  <script name="Choose STD Mode" description="On WDTV devices it switches to STD mode for moviesheets">
+    <command prompt="#" method="ssh">
+      <line>config_tool -c SHOW_FILESIZE_SETTING=0</line>
+      <line>config_tool -c VIDMSHEET=ON</line>
+      <line>config_tool -c GENMSHEET=ON</line>
+      <line>config_tool -c LISTMSHEET=ON</line>
+      <line>config_tool -c MSHEETMODE=std</line>
+      <line>config_tool -s</line>
+      <line>sync &amp;&amp; sync &amp;&amp; reboot -f</line>
+    </command>
+  </script>
+  <script name="Choose WALL Mode" description="On WDTV devices it switches to WALL mode for moviesheets">
+    <command prompt="#" method="ssh">
+      <line>config_tool -c SHOW_FILESIZE_SETTING=0</line>
+      <line>config_tool -c VIDMSHEET=ON</line>
+      <line>config_tool -c GENMSHEET=ON</line>
+      <line>config_tool -c LISTMSHEET=ON</line>
+      <line>config_tool -c MSHEETMODE=wall</line>
+      <line>config_tool -s</line>
+      <line>sync &amp;&amp; sync &amp;&amp; reboot -f</line>
+    </command>
+  </script>
+</scripts>

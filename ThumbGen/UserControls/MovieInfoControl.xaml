@@ -1,0 +1,285 @@
+﻿<UserControl x:Class="ThumbGen.MovieInfoControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:ThumbGen">
+    <UserControl.Resources>
+        <local:StringListCommaConverter x:Key="StringListCommaConverter"/>
+        <BooleanToVisibilityConverter x:Key="Bool2VisibConverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.Row="0" Margin="3" MinHeight="33" 
+                    Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MovieInfoControl}}, Path=IsFullEditor, Converter={StaticResource Bool2VisibConverter}}">
+            <TextBlock Text="Info Source: " VerticalAlignment="Center" Margin="20 0 0 0"/>
+            <ComboBox Name="MovieInfoCombo" Foreground="Black" MinWidth="210" Height="23"
+                  IsSynchronizedWithCurrentItem="True" VerticalAlignment="Center" SelectionChanged="MovieInfoCombo_SelectionChanged"
+                  DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MovieInfoControl}}}">
+                <ComboBox.Resources>
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
+                    </Style>
+                </ComboBox.Resources>
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Margin="2" Text="{Binding ProviderName}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+                <ComboBox.Items>
+                    <local:MovieInfoProviderItem ProviderName="Preferred collector (chosen on main page)" MovieInfoProviderItemType="PrefCollector"
+                                                 MovieInfo="{Binding Path=PrefCollectorInfo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                 IsSelected="True"/>
+                    <local:MovieInfoProviderItem ProviderName="Current collector (selected movie info)" MovieInfoProviderItemType="CurrentCollector"
+                                                 MovieInfo="{Binding Path=CurrentMovieItem.MovieInfo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <local:MovieInfoProviderItem ProviderName="IMDb Movie Info" MovieInfoProviderItemType="IMDB"
+                                             MovieInfo="{Binding Path=IMDBInfo, Mode=TwoWay}"/>
+                    <local:MovieInfoProviderItem ProviderName="My own movie info (from .nfo file)" MovieInfoProviderItemType="MyOwn"
+                                             MovieInfo="{Binding Path=MyDataInfo, Mode=TwoWay}"/>
+                    <local:MovieInfoProviderItem ProviderName="Metadata movie info (from .tgmd file)" MovieInfoProviderItemType="Metadata"
+                                             MovieInfo="{Binding Path=MetadataInfo, Mode=TwoWay}"/>
+                </ComboBox.Items>
+            </ComboBox>
+            <Image x:Name="myNfoImage" Stretch="Uniform" Margin="5 0 0 0" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MovieInfoControl}}}">
+                <Image.Style>
+                    <Style TargetType="{x:Type Image}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding LoadedNfoFileType}" Value="xbmc">
+                                <Setter Property="Source" Value="/Images/xbmc32.png"/>
+                                <Setter Property="Width" Value="32"/>
+                                <Setter Property="Height" Value="32"/>
+                                <Setter Property="ToolTip" Value="xbmc file detected"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding LoadedNfoFileType}" Value="mymovies">
+                                <Setter Property="Source" Value="/Images/mymovies32.png"/>
+                                <Setter Property="Width" Value="32"/>
+                                <Setter Property="Height" Value="32"/>
+                                <Setter Property="ToolTip" Value="mymovies file detected"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding LoadedNfoFileType}" Value="tvixie">
+                                <Setter Property="Source" Value="/Images/tvixie.png"/>
+                                <Setter Property="Width" Value="57"/>
+                                <Setter Property="Height" Value="21"/>
+                                <Setter Property="ToolTip" Value="TViXiE file detected"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding LoadedNfoFileType}" Value="ember">
+                                <Setter Property="Source" Value="/Images/ember.png"/>
+                                <Setter Property="Width" Value="32"/>
+                                <Setter Property="Height" Value="32"/>
+                                <Setter Property="ToolTip" Value="Ember Media Manager file detected"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+        </StackPanel>
+
+        <!--DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MovieInfoControl}}}"-->
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1">
+            <Grid DataContext="{Binding ElementName=MovieInfoCombo,Path=SelectedItem,UpdateSourceTrigger=PropertyChanged}">
+                <Grid.Resources>
+                    <Style TargetType="{x:Type TextBox}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MovieInfoControl}}}" Value="True">
+                                <Setter Property="IsReadOnly" Value="True"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MovieInfoControl}}}" Value="False">
+                                <Setter Property="IsReadOnly" Value="False"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding MovieInfo.HasRightToLeftDirection}" Value="True">
+                                <Setter Property="TextBox.FlowDirection" Value="RightToLeft"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                        <Setter Property="TextBox.FlowDirection" Value="LeftToRight"/>
+                        <Setter Property="HorizontalAlignment" Value="Left"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="Width" Value="300"/>
+                    </Style>
+
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+
+                </Grid.Resources>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid Margin="5">
+                    
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition MinWidth="80" Width="Auto"/>
+                        <ColumnDefinition MinWidth="100" MaxWidth="600"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                    <TextBlock Text="Title:" FontWeight="Bold" HorizontalAlignment="Left" Margin="0,3" Width="80" />
+                    <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding MovieInfo.Name}"/>
+
+                    <TextBlock Grid.Column="0" Grid.Row="1" Text="Original Title:" FontWeight="Bold"/>
+                    <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding MovieInfo.OriginalTitle}" FlowDirection="LeftToRight"/>
+
+                    <StackPanel Grid.Column="0" Grid.ColumnSpan="10" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Left">
+                        <TextBlock Text="Year:" FontWeight="Bold" VerticalAlignment="Center" MinWidth="80"/>
+                        <TextBox Text="{Binding MovieInfo.Year}" Width="50" VerticalAlignment="Center" Margin="0" FlowDirection="LeftToRight"/>
+
+                        <TextBlock Text="IMDb Id:" FontWeight="Bold" VerticalAlignment="Center" Margin="10 0 0 0"/>
+                        <TextBox Text="{Binding MovieInfo.IMDBID}" Width="80" VerticalAlignment="Center" Margin="5 0 0 0" FlowDirection="LeftToRight"/>
+
+                        <TextBlock Text="Rating:" FontWeight="Bold" VerticalAlignment="Center" Margin="10 0 0 0"/>
+                        <TextBox Text="{Binding MovieInfo.Rating}" Width="49" VerticalAlignment="Center" Margin="5 0 0 0" FlowDirection="LeftToRight"/>
+
+
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="10" VerticalAlignment="Center">
+                        <TextBlock Text="Genre:" FontWeight="Bold" VerticalAlignment="Center" MinWidth="80"/>
+                        <TextBox Text="{Binding MovieInfo.Genre,Converter={StaticResource StringListCommaConverter}}" Width="194"/>
+                        <TextBlock Text="Runtime:" FontWeight="Bold" VerticalAlignment="Center" Margin="10 0 0 0"/>
+                        <TextBox Text="{Binding MovieInfo.Runtime}" Width="40" VerticalAlignment="Center" Margin="5 0 0 0" FlowDirection="LeftToRight"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="0" Grid.ColumnSpan="10" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Left">
+                        <TextBlock Text="Director:" FontWeight="Bold" MinWidth="80" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding MovieInfo.Director,Converter={StaticResource StringListCommaConverter}}" Width="150" 
+                                 VerticalAlignment="Center"/>
+
+                        <TextBlock Text="Certification:" FontWeight="Bold" Margin="10 0 0 0" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding MovieInfo.Certification}" Width="62" Margin="5 0 0 0" VerticalAlignment="Center" FlowDirection="LeftToRight"/>
+                    </StackPanel>
+
+
+                    <TextBlock Grid.Column="0" Grid.Row="5" Text="Cast:" FontWeight="Bold"/>
+                    <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding MovieInfo.Cast,Converter={StaticResource StringListCommaConverter}}"/>
+
+                    <TextBlock Grid.Column="0" Grid.Row="6" Text="Company:" FontWeight="Bold"/>
+                    <TextBox Grid.Column="1" Grid.Row="6" Text="{Binding MovieInfo.Studios,Converter={StaticResource StringListCommaConverter},UpdateSourceTrigger=PropertyChanged}" FlowDirection="LeftToRight"/>
+
+                    <TextBlock Grid.Column="0" Grid.Row="7" Text="Countries:" FontWeight="Bold"/>
+                    <TextBox Grid.Column="1" Grid.Row="7" Text="{Binding MovieInfo.Countries,Converter={StaticResource StringListCommaConverter}}"/>
+
+                    <TextBlock Grid.Column="0" Grid.Row="8" Text="Tagline:" FontWeight="Bold"/>
+                    <TextBox Grid.Column="1" Grid.Row="8" Text="{Binding MovieInfo.Tagline}" FlowDirection="LeftToRight"/>
+                    
+                    <TextBlock Grid.Column="0" Grid.Row="9" Text="MPAA:" FontWeight="Bold"/>
+                    <TextBox Grid.Column="1" Grid.Row="9" Text="{Binding MovieInfo.MPAA}" FlowDirection="LeftToRight"/>
+
+                    <TextBlock Grid.Column="0" Grid.Row="10" Text="Release Date:" FontWeight="Bold"/>
+                    <TextBox Grid.Column="1" Grid.Row="10" Text="{Binding MovieInfo.ReleaseDate}" FlowDirection="LeftToRight"/>
+
+                    <TextBlock Grid.Column="0" Grid.Row="11" Text="Trailer:" FontWeight="Bold"/>
+                    <TextBox Grid.Column="1" Grid.Row="11" Text="{Binding MovieInfo.Trailer}" FlowDirection="LeftToRight"/>
+                    
+                    <TextBlock Grid.Column="0" Grid.Row="12" Text="Overview:" FontWeight="Bold"/>
+                    <TextBox Grid.Column="1" Grid.Row="12" Text="{Binding MovieInfo.Overview}" TextWrapping="Wrap" AcceptsReturn="True" 
+                                MinHeight="60" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                    
+                    <TextBlock Grid.Column="0" Grid.Row="13" Text="Comments:" FontWeight="Bold"/>
+                    <TextBox Grid.Column="1" Grid.Row="13" Text="{Binding MovieInfo.Comments}" TextWrapping="Wrap" AcceptsReturn="True" 
+                                MinHeight="60" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+
+                </Grid>
+                <Grid Grid.Row="1" Margin="5" x:Name="SeriesGrid">
+                    <Grid.Resources>
+                        <local:NullToBoolConverter x:Key="NullToBoolConverter"/>
+                    </Grid.Resources>
+                    <Grid.Style>
+                        <Style>
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=MovieInfo.Season, Converter={StaticResource NullToBoolConverter}}" Value="False" />
+                                        <Condition Binding="{Binding Path=MovieInfo.Episode, Converter={StaticResource NullToBoolConverter}}" Value="False"/>
+                                        <Condition Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MovieInfoControl}}, Path=IsFullEditor}" Value="True"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Grid.Visibility" Value="Collapsed" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                            <Setter Property="Grid.Visibility" Value="Visible" />
+                        </Style>
+                    </Grid.Style>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition MinWidth="80" Width="Auto"/>
+                        <ColumnDefinition MinWidth="100" MaxWidth="600"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Column="0" Grid.ColumnSpan="10" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
+                        <TextBlock Text="Season:" FontWeight="Bold" MinWidth="80" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding MovieInfo.Season,Converter={StaticResource StringListCommaConverter}}" 
+                                 Width="120" VerticalAlignment="Center" FlowDirection="LeftToRight"/>
+
+                        <TextBlock Text="Episode:" FontWeight="Bold" Margin="10 0 0 0" VerticalAlignment="Center" />
+                        <TextBox Text="{Binding MovieInfo.Episode}" Width="118" Margin="5 0 0 0" 
+                                 VerticalAlignment="Center" FlowDirection="LeftToRight"/>
+                    </StackPanel>
+
+                    <TextBlock Grid.Column="0" Grid.Row="1" Text="Episode Title:" FontWeight="Bold" />
+                    <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding MovieInfo.EpisodeName}" />
+
+                    <TextBlock Grid.Column="0" Grid.Row="2" Text="Episode Plot:" FontWeight="Bold" />
+                    <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding MovieInfo.EpisodePlot}" TextWrapping="Wrap" AcceptsReturn="True" 
+                                MinHeight="60" ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                    <TextBlock Grid.Column="0" Grid.Row="3" Text="Episode Date:" FontWeight="Bold" />
+                    <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding MovieInfo.EpisodeReleaseDate}" FlowDirection="LeftToRight"/>
+                    <TextBlock Grid.Column="0" Grid.Row="4" Text="Episodes List:" FontWeight="Bold" />
+                    <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding MovieInfo.Episodes,Converter={StaticResource StringListCommaConverter}}"/>
+                    <TextBlock Grid.Column="0" Grid.Row="5" Text="Ep. Names:" FontWeight="Bold" />
+                    <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding MovieInfo.EpisodesNames,Converter={StaticResource StringListCommaConverter}}"/>
+                    <TextBlock Grid.Column="0" Grid.Row="6" Text="Writers:" FontWeight="Bold" />
+                    <TextBox Grid.Column="1" Grid.Row="6" Text="{Binding MovieInfo.Writers,Converter={StaticResource StringListCommaConverter}}"/>
+                    <TextBlock Grid.Column="0" Grid.Row="7" Text="Guest Stars:" FontWeight="Bold" />
+                    <TextBox Grid.Column="1" Grid.Row="7" Text="{Binding MovieInfo.GuestStars,Converter={StaticResource StringListCommaConverter}}"/>
+                </Grid>
+            </Grid>
+        </ScrollViewer>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.Row="2" Margin="10"
+                    Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MovieInfoControl}}, Path=IsFullEditor, Converter={StaticResource Bool2VisibConverter}}">
+            <Button x:Name="GenerateNfoFile" Height="23" VerticalAlignment="Center" FontWeight="Normal" Visibility="Visible"
+                    Click="GenerateNfoFile_Click" Margin="3" ToolTip="Generate a .nfo file having same name as the movie containing the current selected movie information">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Image Source="/Images/movie.png" VerticalAlignment="Center"/>
+                    <TextBlock Text="Generate .nfo file with this data" Margin="2 0 0 0" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="UseDataForMovieSheetButton" Margin="5 0 0 0" VerticalAlignment="Center" Command="{x:Static local:MovieInfoControl.UseMovieInfoCommand}"
+                    ToolTip="Use the current movie info inside the moviesheet"
+                    Visibility="{Binding Source={x:Static local:FileManager.EnableMovieSheets}, Converter={StaticResource Bool2VisibConverter}}">
+                <Image Source="/images/done.png" VerticalAlignment="Center" Width="16" Height="16"/>
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

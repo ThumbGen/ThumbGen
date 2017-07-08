@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="ThumbGen.TemplateSelectorControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:moviesheets="clr-namespace:ThumbGen.MovieSheets">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="Bool2VisibConverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}}, Path=LabelText}" VerticalAlignment="Center" Margin="0 0 5 0"/>
+        <ComboBox x:Name="TemplatesCombo" HorizontalAlignment="Left" VerticalAlignment="Center" MinWidth="150" Grid.Column="1"
+                                          Height="23" Foreground="Black" MaxWidth="350" IsSynchronizedWithCurrentItem="True"
+                                          ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}}, Path=TemplatesMan.Templates}"
+                                          DisplayMemberPath="TemplateName"
+                                          SelectionChanged="TemplatesCombo_SelectionChanged">
+
+
+            <ComboBox.Resources>
+                <Style TargetType="ComboBoxItem">
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </Style>
+            </ComboBox.Resources>
+        </ComboBox>
+        <Button x:Name="TemplatesRefreshButton" Click="TemplatesRefreshButton_Click" Margin="2" VerticalAlignment="Center" Grid.Column="2" Height="21">
+            <Image Source="/images/refresh.png" Width="16" Height="16" ToolTip="Refresh list of templates from Templates subfolder"/>
+        </Button>
+        <Button x:Name="GotoTvixie" Margin="2" Click="GotoTvixie_Click" VerticalAlignment="Center" Height="21" Grid.Column="3" Visibility="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}}, Path=ShowTvixieButton, Converter={StaticResource Bool2VisibConverter}}"
+                    ToolTip="Visit wdtvlive.net website for more templates" HorizontalAlignment="Left">
+            <Button.Content>
+                <Image Source="/images/question.png" Stretch="Uniform" Width="16" Height="16" Cursor="Hand"/>
+            </Button.Content>
+        </Button>
+    </Grid>
+</UserControl>

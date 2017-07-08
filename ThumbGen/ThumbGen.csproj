@@ -1,0 +1,1283 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F0D5BCAA-3983-43A5-8540-197B5B1AFF0A}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ThumbGen</RootNamespace>
+    <AssemblyName>ThumbGen</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <TargetZone>LocalIntranet</TargetZone>
+    <GenerateManifests>false</GenerateManifests>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <ManifestCertificateThumbprint>62EFD4E01666F7134998B4CF0723F99CDC8B461D</ManifestCertificateThumbprint>
+    <ManifestKeyFile>ThumbGen_TemporaryKey.pfx</ManifestKeyFile>
+    <SignManifests>true</SignManifests>
+    <ApplicationIcon>ThumbGen.ico</ApplicationIcon>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>false</MapFileExtensions>
+    <ProductName>WDTV ThumbGen</ProductName>
+    <PublisherName>ThumbGen</PublisherName>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <WebPage>index.html</WebPage>
+    <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
+    <AutorunEnabled>true</AutorunEnabled>
+    <ApplicationRevision>19</ApplicationRevision>
+    <ApplicationVersion>0.5.19.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Output\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\Output\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>ThumbGen.Program</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AvalonDock, Version=1.3.3548.0, Culture=neutral, PublicKeyToken=85a1e0ada7ec13e4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="CookComputing.XmlRpcV2, Version=2.4.0.0, Culture=neutral, PublicKeyToken=a7d6e17aa302004d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\CookComputing.XmlRpcV2.dll</HintPath>
+    </Reference>
+    <Reference Include="DiscUtils, Version=0.9.0.0, Culture=neutral, PublicKeyToken=60a04f11f1df810d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\DiscUtils.dll</HintPath>
+    </Reference>
+    <Reference Include="DiscUtils.Common, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\DiscUtils.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Fluent, Version=1.3.0.0, Culture=neutral, PublicKeyToken=3e436e32a8c5546f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\Fluent.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zip.Reduced, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\Ionic.Zip.Reduced.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog, Version=1.0.0.505, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp, Version=104.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Tamir.SharpSSH, Version=1.1.1.13, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\Tamir.SharpSSH.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationFramework.Aero">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationFramework.Classic" />
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="ThumbGen.Renderer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\ThumbGen.Renderer.dll</HintPath>
+    </Reference>
+    <Reference Include="UIAutomationProvider">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WatTmdb, Version=0.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\WatTmdb.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationCore">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationFramework">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="BatchApplyFolderBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Bundles\BundlesManagerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ChangePasswordDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ChooseMovieFromIMDb.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CommonStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DebugTemplateBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="FileExplorer\View\DirectoryViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="FileExplorer\View\ExplorerWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="FileExplorer\View\FileSystemTree.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="InputBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Adorners\LoadingScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="OutlookNavigatorPaneDict.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\BackstageItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ImageSizeControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MaxFilesizeControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MediaInfoControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Options.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Playlists\PlaylistWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SelectTemplateBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SplashWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\AutomaticAdorner.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\AutoselectImage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\FileInfoControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\FileSelectorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\MetadataControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MovieInfoControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\MoviePlayer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\OptionsButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\PopupInfoControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="PreviewImage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ResultsListBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Adorners\SimpleSpinner.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Subtitles\ChooseSubtitles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ThumbGenMainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\ProfileSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\TemplateSelectorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Bundles\Bundle.cs" />
+    <Compile Include="Bundles\BundlesDatabase.cs" />
+    <Compile Include="Bundles\BundlesManager.cs" />
+    <Compile Include="Bundles\BundlesManagerView.xaml.cs">
+      <DependentUpon>BundlesManagerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Bundles\BundlesManagerViewModel.cs" />
+    <Compile Include="ChangePasswordDialog.xaml.cs">
+      <DependentUpon>ChangePasswordDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Collectors\AllocineCollector.cs" />
+    <Compile Include="Collectors\Allocine\Activity.cs" />
+    <Compile Include="Collectors\Allocine\AllocineAPI.cs" />
+    <Compile Include="Collectors\Allocine\AllocineObjectModel.cs" />
+    <Compile Include="Collectors\Allocine\AlloHelpers.cs" />
+    <Compile Include="Collectors\Allocine\AwardType.cs" />
+    <Compile Include="Collectors\Allocine\BoxOffice.cs" />
+    <Compile Include="Collectors\Allocine\CastingShort.cs" />
+    <Compile Include="Collectors\Allocine\CastMember.cs" />
+    <Compile Include="Collectors\Allocine\Category.cs" />
+    <Compile Include="Collectors\Allocine\Color.cs" />
+    <Compile Include="Collectors\Allocine\CopyrightHolder.cs" />
+    <Compile Include="Collectors\Allocine\Country.cs" />
+    <Compile Include="Collectors\Allocine\Distributor.cs" />
+    <Compile Include="Collectors\Allocine\Enums.cs" />
+    <Compile Include="Collectors\Allocine\Episode.cs" />
+    <Compile Include="Collectors\Allocine\Error.cs" />
+    <Compile Include="Collectors\Allocine\Feature.cs" />
+    <Compile Include="Collectors\Allocine\FeaturePicture.cs" />
+    <Compile Include="Collectors\Allocine\Feed.cs" />
+    <Compile Include="Collectors\Allocine\FestivalAward.cs" />
+    <Compile Include="Collectors\Allocine\Format.cs" />
+    <Compile Include="Collectors\Allocine\Formatlist.cs" />
+    <Compile Include="Collectors\Allocine\Genre.cs" />
+    <Compile Include="Collectors\Allocine\Geoloc.cs" />
+    <Compile Include="Collectors\Allocine\IAlloError.cs" />
+    <Compile Include="Collectors\Allocine\Language.cs" />
+    <Compile Include="Collectors\Allocine\Link.cs" />
+    <Compile Include="Collectors\Allocine\Location.cs" />
+    <Compile Include="Collectors\Allocine\LocationType.cs" />
+    <Compile Include="Collectors\Allocine\Media.cs" />
+    <Compile Include="Collectors\Allocine\Movie.cs" />
+    <Compile Include="Collectors\Allocine\MovieType.cs" />
+    <Compile Include="Collectors\Allocine\NameGivenFamily.cs" />
+    <Compile Include="Collectors\Allocine\Nationality.cs" />
+    <Compile Include="Collectors\Allocine\News.cs" />
+    <Compile Include="Collectors\Allocine\NewsPicture.cs" />
+    <Compile Include="Collectors\Allocine\NewsSource.cs" />
+    <Compile Include="Collectors\Allocine\OriginalBroadcast.cs" />
+    <Compile Include="Collectors\Allocine\OriginalChannel.cs" />
+    <Compile Include="Collectors\Allocine\Parent.cs" />
+    <Compile Include="Collectors\Allocine\ParentEdition.cs" />
+    <Compile Include="Collectors\Allocine\ParentFestival.cs" />
+    <Compile Include="Collectors\Allocine\ParentSeason.cs" />
+    <Compile Include="Collectors\Allocine\ParentSeries.cs" />
+    <Compile Include="Collectors\Allocine\Participation.cs" />
+    <Compile Include="Collectors\Allocine\Period.cs" />
+    <Compile Include="Collectors\Allocine\Person.cs" />
+    <Compile Include="Collectors\Allocine\PersonLight.cs" />
+    <Compile Include="Collectors\Allocine\Picture.cs" />
+    <Compile Include="Collectors\Allocine\Poster.cs" />
+    <Compile Include="Collectors\Allocine\ProductionFormat.cs" />
+    <Compile Include="Collectors\Allocine\ProductionStatus.cs" />
+    <Compile Include="Collectors\Allocine\ProjectionFormat.cs" />
+    <Compile Include="Collectors\Allocine\Publication.cs" />
+    <Compile Include="Collectors\Allocine\Rating.cs" />
+    <Compile Include="Collectors\Allocine\RatingStats.cs" />
+    <Compile Include="Collectors\Allocine\Release.cs" />
+    <Compile Include="Collectors\Allocine\ReleaseState.cs" />
+    <Compile Include="Collectors\Allocine\Rendition.cs" />
+    <Compile Include="Collectors\Allocine\Results.cs" />
+    <Compile Include="Collectors\Allocine\Review.cs" />
+    <Compile Include="Collectors\Allocine\ReviewUrl.cs" />
+    <Compile Include="Collectors\Allocine\Season.cs" />
+    <Compile Include="Collectors\Allocine\SeriesType.cs" />
+    <Compile Include="Collectors\Allocine\SoundFormat.cs" />
+    <Compile Include="Collectors\Allocine\Statistics.cs" />
+    <Compile Include="Collectors\Allocine\Subject.cs" />
+    <Compile Include="Collectors\Allocine\Tag.cs" />
+    <Compile Include="Collectors\Allocine\Theater.cs" />
+    <Compile Include="Collectors\Allocine\Thumbnail.cs" />
+    <Compile Include="Collectors\Allocine\TopBanner.cs" />
+    <Compile Include="Collectors\Allocine\Trailer.cs" />
+    <Compile Include="Collectors\Allocine\Trivia.cs" />
+    <Compile Include="Collectors\Allocine\Tvseries.cs" />
+    <Compile Include="Collectors\Allocine\Type.cs" />
+    <Compile Include="Collectors\ANTMovieCatalogCollector.cs" />
+    <Compile Include="Collectors\CinemarxCollector.cs" />
+    <Compile Include="Collectors\CollectorzComCollector.cs" />
+    <Compile Include="Collectors\DaumCollector.cs" />
+    <Compile Include="Collectors\FilmiveebCollector.cs" />
+    <Compile Include="Collectors\FilmzCollector.cs" />
+    <Compile Include="Collectors\IMDbCountries.cs" />
+    <Compile Include="Collectors\InterfilmesCollector.cs" />
+    <Compile Include="Collectors\KinopoiskCollector.cs" />
+    <Compile Include="Collectors\OutnowCollector.cs" />
+    <Compile Include="Collectors\PortHuCollector.cs" />
+    <Compile Include="Collectors\SinemalarCollector.cs" />
+    <Compile Include="Collectors\TorecCollector.cs" />
+    <Compile Include="Collectors\XMLImportCollectorBase.cs" />
+    <Compile Include="CommandLineManager.cs" />
+    <Compile Include="Executor.cs" />
+    <Compile Include="Helpers\FontHelper.cs" />
+    <Compile Include="Helpers\LetterPairSimilarity.cs" />
+    <Compile Include="Helpers\NaiveThreadPool.cs" />
+    <Compile Include="Helpers\NConsoler.cs" />
+    <Compile Include="Helpers\NDesk.Options.cs" />
+    <Compile Include="Helpers\NullImageConverter.cs" />
+    <Compile Include="Helpers\ResourceEnumConverter.cs" />
+    <Compile Include="Helpers\SSHHelper.cs" />
+    <Compile Include="Helpers\TelnetHelper.cs" />
+    <Compile Include="Helpers\TelnetInterface.cs" />
+    <Compile Include="Helpers\TVShowsHelper.cs" />
+    <Compile Include="Helpers\XSLExtensions.cs" />
+    <Compile Include="ImagesProcessor.cs" />
+    <Compile Include="Main.cs" />
+    <Compile Include="Playlists\PlaylistManager.cs" />
+    <Compile Include="Playlists\PlaylistWindow.xaml.cs">
+      <DependentUpon>PlaylistWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ProfileItem.cs" />
+    <Compile Include="ProfilesManager.cs" />
+    <Compile Include="SplashWindow.xaml.cs">
+      <DependentUpon>SplashWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ThumbGenMainWindow.xaml.cs">
+      <DependentUpon>ThumbGenMainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Amazon.ECS.Addons\AmazonHeader.cs" />
+    <Compile Include="Amazon.ECS.Addons\AmazonSigningEndpointBehavior.cs" />
+    <Compile Include="Amazon.ECS.Addons\AmazonSigningMessageInspector.cs" />
+    <Compile Include="BatchApplyFolderBox.xaml.cs">
+      <DependentUpon>BatchApplyFolderBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CheckInternetConnectivity.cs" />
+    <Compile Include="ChooseMovieFromIMDb.xaml.cs">
+      <DependentUpon>ChooseMovieFromIMDb.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Collectors\AllProvidersCollector.cs" />
+    <Compile Include="Collectors\AlpacineCollector.cs" />
+    <Compile Include="Collectors\AmazonCollector.cs" />
+    <Compile Include="Collectors\BlurayCollector.cs" />
+    <Compile Include="Collectors\CinemagiaCollector.cs" />
+    <Compile Include="Collectors\CinemaPTGateCollector.cs" />
+    <Compile Include="Collectors\CinePassionCollector.cs" />
+    <Compile Include="Collectors\CSFDCollector.cs" />
+    <Compile Include="Collectors\FilmAffinityCollector.cs" />
+    <Compile Include="Collectors\FilmposterArchivCollector.cs" />
+    <Compile Include="Collectors\FilmWebCollector.cs" />
+    <Compile Include="Collectors\IMDBMovieInfo.cs" />
+    <Compile Include="Collectors\MoviePlayerITCollector.cs" />
+    <Compile Include="Collectors\MoviePosterDBCollector.cs" />
+    <Compile Include="Collectors\OFDbCollector.cs" />
+    <Compile Include="Collectors\MovieMeterCollector.cs" />
+    <Compile Include="Collectors\MovieMeterHelper.cs">
+    </Compile>
+    <Compile Include="Collectors\SratimCollector.cs" />
+    <Compile Include="Collectors\TheTVDBCollector.cs" />
+    <Compile Include="Configuration.cs" />
+    <Compile Include="DebugTemplateBox.xaml.cs">
+      <DependentUpon>DebugTemplateBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel.cs" />
+    <Compile Include="Helpers\DraggableExtender.cs" />
+    <Compile Include="FileExplorer\Model\FileSystemExplorerService.cs" />
+    <Compile Include="FileExplorer\ViewModel\DirectoryViewerViewModel.cs" />
+    <Compile Include="FileExplorer\ViewModel\DirInfo.cs" />
+    <Compile Include="FileExplorer\ViewModel\ExplorerWindowViewModel.cs" />
+    <Compile Include="FileExplorer\ViewModel\FileExplorerViewModel.cs" />
+    <Compile Include="FileExplorer\ViewModel\RelayCommand.cs" />
+    <Compile Include="FileExplorer\ViewModel\ValueConverters.cs" />
+    <Compile Include="FileExplorer\ViewModel\ViewModelBase.cs" />
+    <Compile Include="FileExplorer\View\DirectoryViewer.xaml.cs">
+      <DependentUpon>DirectoryViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FileExplorer\View\ExplorerWindow.xaml.cs">
+      <DependentUpon>ExplorerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FileExplorer\View\FileSystemTree.xaml.cs">
+      <DependentUpon>FileSystemTree.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FileExplorer\VirtualToggleButton.cs" />
+    <Compile Include="FileManager.cs" />
+    <Compile Include="Helpers\FileInfoItem.cs" />
+    <Compile Include="Helpers\Helpers.cs" />
+    <Compile Include="Helpers\AsyncImageDownloader.cs" />
+    <Compile Include="Helpers\HyperlinkController.cs" />
+    <Compile Include="Helpers\PasswordBoxAssistant.cs" />
+    <Compile Include="Helpers\SerializableDictionary.cs" />
+    <Compile Include="Helpers\WindowSettings.cs" />
+    <Compile Include="Helpers\ZipHelper.cs" />
+    <Compile Include="InputBox.xaml.cs">
+      <DependentUpon>InputBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\KeywordGenerator.cs" />
+    <Compile Include="Adorners\LoadingScreen.xaml.cs">
+      <DependentUpon>LoadingScreen.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Adorners\OverlayAdorner.cs" />
+    <Compile Include="Helpers\Loggy.cs" />
+    <Compile Include="UserControls\BackstageItem.xaml.cs">
+      <DependentUpon>BackstageItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ImageSizeControl.xaml.cs">
+      <DependentUpon>ImageSizeControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MaxFilesizeControl.xaml.cs">
+      <DependentUpon>MaxFilesizeControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MediaInfoControl.xaml.cs">
+      <DependentUpon>MediaInfoControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MediaInfo\MediaInfoDLL.cs" />
+    <Compile Include="MediaInfo\MediaInfoManager.cs" />
+    <Compile Include="MediaInfo\MediaInfoModel.cs" />
+    <Compile Include="MovieSheets\MovieSheetsGenerator.cs" />
+    <Compile Include="MovieSheets\MoviesheetsUpdateManager.cs" />
+    <Compile Include="MovieSheets\TemplateItem.cs" />
+    <Compile Include="MovieSheets\TemplatesManager.cs" />
+    <Compile Include="Options.xaml.cs">
+      <DependentUpon>Options.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SelectTemplateBox.xaml.cs">
+      <DependentUpon>SelectTemplateBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Translator\TranslatorManager.cs" />
+    <Compile Include="UserControls\AutomaticAdorner.xaml.cs">
+      <DependentUpon>AutomaticAdorner.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\AutoselectImage.xaml.cs">
+      <DependentUpon>AutoselectImage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\FileInfoControl.xaml.cs">
+      <DependentUpon>FileInfoControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\FileSelectorControl.xaml.cs">
+      <DependentUpon>FileSelectorControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MetadataControl.xaml.cs">
+      <DependentUpon>MetadataControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MovieInfoControl.xaml.cs">
+      <DependentUpon>MovieInfoControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MoviePlayer.xaml.cs">
+      <DependentUpon>MoviePlayer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\nfoHelper.cs" />
+    <Compile Include="MP4Tagger\MP4Manager.cs" />
+    <Compile Include="MP4Tagger\MP4V2Wrapper.cs" />
+    <Compile Include="UserControls\OptionsButton.xaml.cs">
+      <DependentUpon>OptionsButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PopupInfoControl.xaml.cs">
+      <DependentUpon>PopupInfoControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PreviewImage.xaml.cs">
+      <DependentUpon>PreviewImage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ResultsListBox.xaml.cs">
+      <DependentUpon>ResultsListBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\Amazon.ECS\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Collectors\BaseCollector.cs" />
+    <Compile Include="Collectors\TheMovieDbCollector.cs" />
+    <Compile Include="Adorners\SimpleSpinner.xaml.cs">
+      <DependentUpon>SimpleSpinner.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FileExplorer\TreeViewItemBehaviour.cs" />
+    <Compile Include="Subtitles\ChooseSubtitles.xaml.cs">
+      <DependentUpon>ChooseSubtitles.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Subtitles\IOSDb.cs" />
+    <Compile Include="Subtitles\SubtitlesManager.cs" />
+    <Compile Include="UserControls\ProfileSelector.xaml.cs">
+      <DependentUpon>ProfileSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\TemplateSelectorControl.xaml.cs">
+      <DependentUpon>TemplateSelectorControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="VideoScreenShot.cs" />
+    <None Include="app.config" />
+    <EmbeddedResource Include="Presets\Xtreamer.tgp" />
+    <EmbeddedResource Include="Presets\WDTVLive Movies Sheet.tgp" />
+    <EmbeddedResource Include="Presets\WDTVLive TV Shows Sheet.tgp" />
+    <EmbeddedResource Include="Presets\Xtreamer TV Shows.tgp" />
+    <EmbeddedResource Include="Presets\Xtreamer TG_Sheets.tgp" />
+    <EmbeddedResource Include="Presets\ACRyan POHD.tgp" />
+    <EmbeddedResource Include="Presets\_Default ThumbGen Template_.zip" />
+    <None Include="Service References\Amazon.ECS\AWSECommerceService.wsdl" />
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\Amazon.ECS\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\Amazon.ECS\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\Amazon.ECS\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\app.manifest" />
+    <None Include="Service References\Amazon.ECS\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\Amazon.ECS\ThumbGen.Amazon.ECS.BrowseNodeLookupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Amazon.ECS\ThumbGen.Amazon.ECS.CartAddResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Amazon.ECS\ThumbGen.Amazon.ECS.CartClearResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Amazon.ECS\ThumbGen.Amazon.ECS.CartCreateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Amazon.ECS\ThumbGen.Amazon.ECS.CartGetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Amazon.ECS\ThumbGen.Amazon.ECS.CartModifyResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Amazon.ECS\ThumbGen.Amazon.ECS.ItemLookupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Amazon.ECS\ThumbGen.Amazon.ECS.ItemSearchResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\Amazon.ECS\ThumbGen.Amazon.ECS.SimilarityLookupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="ThumbGen_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\splashscreen.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\IMDb.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\info.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="demo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\done.png" />
+    <Resource Include="Images\query.png" />
+    <Resource Include="Images\skipped.png" />
+    <Resource Include="Images\unknown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\explorer.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\file.png" />
+    <Resource Include="Images\folder.png" />
+    <Resource Include="versioninfo.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\mycomputer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\movie.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\database.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\question.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\VideoPlayer\pause.png" />
+    <Resource Include="Images\VideoPlayer\play.png" />
+    <Resource Include="Images\VideoPlayer\record.png" />
+    <Resource Include="Images\VideoPlayer\stop.png" />
+    <Resource Include="Images\VideoPlayer\volume.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\diskdrive.png" />
+    <Resource Include="Images\VideoPlayer\forward.png" />
+    <Resource Include="Images\VideoPlayer\rewind.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\IMDb_small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\subtitles.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\camera.png" />
+    <Resource Include="Images\opensubtitles.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\OpenSubtitlesFavIcon.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\mediainfo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="MP4Tagger\template.mp4" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\backdrop.png" />
+    <Resource Include="Images\save.png" />
+    <Resource Include="Images\view.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\moviesfolder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Flags\ca.png" />
+    <Resource Include="Images\Flags\de.png" />
+    <Resource Include="Images\Flags\es.png" />
+    <Resource Include="Images\Flags\fr.png" />
+    <Resource Include="Images\Flags\ro.png" />
+    <Resource Include="Images\Flags\uk.png" />
+    <Resource Include="Images\Flags\us.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Flags\global.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\warning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\clover.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MediaFlags\1080P.png" />
+    <Resource Include="Images\MediaFlags\720P.png" />
+    <Resource Include="Images\MediaFlags\aac.png" />
+    <Resource Include="Images\MediaFlags\aac6ch.png" />
+    <Resource Include="Images\MediaFlags\aaclc2.png" />
+    <Resource Include="Images\MediaFlags\DOLBY21.png" />
+    <Resource Include="Images\MediaFlags\DOLBY51.png" />
+    <Resource Include="Images\MediaFlags\DVD.png" />
+    <Resource Include="Images\MediaFlags\EMPTY.png" />
+    <Resource Include="Images\MediaFlags\H264.png" />
+    <Resource Include="Images\MediaFlags\MKV.png" />
+    <Resource Include="Images\MediaFlags\Mpeg video.png" />
+    <Resource Include="Images\MediaFlags\WMVHD.png" />
+    <Resource Include="Images\MediaFlags\XVID.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\document_edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\snapshot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MediaFlags\vorbis.png" />
+    <Resource Include="Images\MediaFlags\flac.png" />
+    <Resource Include="Images\MediaFlags\wma.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MediaFlags\WMa2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\open.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MediaFlags\wmv.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MediaFlags\288p.png" />
+    <Resource Include="Images\MediaFlags\480p.png" />
+    <Resource Include="Images\MediaFlags\576p.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MediaFlags\BLURAY.png" />
+    <Resource Include="Images\MediaFlags\DIVX.png" />
+    <Resource Include="Images\MediaFlags\DTS.png" />
+    <Resource Include="Images\MediaFlags\MP3 audio.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MediaFlags\subtitles.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\tvixie.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Flags\it.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\options_old.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\connect.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Flags\pt.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\advanced_settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\dice.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Flags\nl.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\cinepassion.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\fanart1.PNG" />
+    <Resource Include="Images\fanart2.PNG" />
+    <Resource Include="Images\fanart3.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\reset.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\moviesheet_folder.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="XSLT\XBMCImport.xslt">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\metadata.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Flags\cz.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\help_target.PNG" />
+    <Resource Include="Images\mymovies32.png" />
+    <Resource Include="Images\xbmc32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="XSLT\MyMoviesImport.xslt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\arrow_down.png" />
+    <Resource Include="Images\arrow_up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Flags\pl.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Flags\hb.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\backgr.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Collectors\imdbcountries.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\add.png" />
+    <Resource Include="Images\del.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Flags\hu.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\splash.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\google.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\playlist.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Flags\ch.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="XSLT\export_tvixie.xslt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="XSLT\import_tvixie.xslt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\auto.gif" />
+    <Resource Include="Images\manual.png" />
+    <Resource Include="Images\semiauto.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Flags\ru.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="XSLT\import_ember.xslt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ember.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\quick.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\twitter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\descending.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\google_small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\question32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\started32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\contact32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\updates32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\refresh32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\manual32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\semiauto32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\auto32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\clover32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\playlist32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\dice32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\check32.png" />
+    <Resource Include="Images\remove32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\back32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\generate32.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\done32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\stop32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\search32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\foldersgears32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\flipX.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\quick32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\collectorz32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\options.png" />
+    <Resource Include="Images\options32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ant32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\beta.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\selectall.png" />
+    <Resource Include="Images\selectnone.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\minus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="XSLT\ant_import.xslt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="XSLT\collectorz_import.xslt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\reboot32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\execute32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\pass32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\logo_acryan.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Presets\scripts.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\batch32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="XSLT\export_xbmc.xslt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\protect.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Flags\ee.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Flags\kr.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Flags\br.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Flags\tr.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Flags\dk.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ThumbGen.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\facebook.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Designer32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="XSLT\export_wdtvhub.xslt">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="XSLT\export_wdtvhub_v2.xslt">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\package32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\package16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\package24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\lite1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\skip32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\jump32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\3rdParty\CookComputing.XmlRpcV2.dll">
+      <Link>Assemblies\CookComputing.XmlRpcV2.dll</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\3rdParty\DiffieHellman.dll">
+      <Link>Assemblies\DiffieHellman.dll</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\3rdParty\DiscUtils.Common.dll">
+      <Link>Assemblies\DiscUtils.Common.dll</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\3rdParty\DiscUtils.dll">
+      <Link>Assemblies\DiscUtils.dll</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\3rdParty\libmp4v2.dll">
+      <Link>Assemblies\libmp4v2.dll</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\3rdParty\MediaInfo.dll">
+      <Link>Assemblies\MediaInfo.dll</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\3rdParty\MP4V2Wrapper.dll">
+      <Link>Assemblies\MP4V2Wrapper.dll</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\3rdParty\Org.Mentalis.Security.dll">
+      <Link>Assemblies\Org.Mentalis.Security.dll</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\3rdParty\Tamir.SharpSSH.dll">
+      <Link>Assemblies\Tamir.SharpSSH.dll</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(TargetDir)\ThumbGen.Core.dll">
+      <Link>Assemblies\ThumbGen.Core.dll</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\3rdParty\ThumbGen.Renderer.dll">
+      <Link>Assemblies\ThumbGen.Renderer.dll</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\3rdParty\Newtonsoft.Json.dll">
+      <Link>Assemblies\Newtonsoft.Json.dll</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\3rdParty\RestSharp.dll">
+      <Link>Assemblies\RestSharp.dll</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\3rdParty\WatTmdb.dll">
+      <Link>Assemblies\WatTmdb.dll</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ThumbGen.Core\ThumbGen.Core\ThumbGen.Core.csproj">
+      <Project>{69db7ea3-4f5b-4d5a-8b02-6bb60fd6ff63}</Project>
+      <Name>ThumbGen.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>rem xcopy "$(TargetDir)..\..\3rdParty\*.*" "$(TargetDir)"  /Y /C</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,17 @@
+﻿<Window x:Class="ThumbGen.PreviewImage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:ThumbGen" Closing="Window_Closing"
+    Title="Preview Image" WindowState="Maximized" KeyDown="Window_KeyDown" local:WindowSettings.Save="True">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Margin="5">
+            <Button HorizontalAlignment="Right" x:Name="btnActualSize" Content="View Actual Size" Click="ViewActualSizeButton_Click" Margin="2"/>
+            <Button HorizontalAlignment="Right" x:Name="btnBestFit" Content="View Best Fit" Click="ViewFullScreenButton_Click" Margin="2"/>
+        </StackPanel>
+        <Image x:Name="TheImage" Grid.Row="1"/>
+    </Grid>
+</Window>

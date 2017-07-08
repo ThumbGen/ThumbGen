@@ -1,0 +1,141 @@
+﻿<fluent:RibbonWindow x:Class="FileExplorer.View.ExplorerWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Views="clr-namespace:FileExplorer.View"
+    xmlns:local="clr-namespace:FileExplorer.ViewModel"
+    xmlns:fluent="clr-namespace:Fluent;assembly=Fluent"
+    xmlns:thumbgen="clr-namespace:ThumbGen"
+    Title="{Binding Path=CurrentDirectory.Name}" Width="Auto" Height="Auto" WindowState="Maximized" thumbgen:WindowSettings.Save="True">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/CommonStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <!--<local:ControlVisibilityConverter x:Key="VisibilityConverter" />-->
+            <BooleanToVisibilityConverter x:Key="BoolVisibilityConverter"></BooleanToVisibilityConverter>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid x:Name="OuterGrid" DataContext="{Binding}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <fluent:Ribbon Grid.Column="0" Grid.ColumnSpan="2" IsQuickAccessToolBarVisible="False" AutomaticStateManagement="true" BackstageBrush="{x:Static thumbgen:FileManager.BackstageBrush}" x:Name="TheRibbon">
+            <fluent:RibbonTabItem Header="Home">
+                <fluent:RibbonGroupBox Header="Filters - Show files" DataContext="{Binding Source={x:Static thumbgen:FileManager.Configuration},Path=Options}">
+                    <StackPanel Orientation="Vertical" Margin="5 10 0 0">
+                        <CheckBox Content="without moviesheet" IsChecked="{Binding FileBrowserOptions.FilterWithoutMoviesheet}" />
+                        <CheckBox Content="without extra moviesheet" IsChecked="{Binding FileBrowserOptions.FilterWithoutExtraMoviesheet}" />
+                        <CheckBox Content="without external subtitles" IsChecked="{Binding FileBrowserOptions.FilterWithoutExtSubtitles}"/>
+                        <CheckBox Content="without movie info (.nfo file)" IsChecked="{Binding FileBrowserOptions.FilterWithoutMovieInfo}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Margin="5 10 0 0">
+                        <CheckBox Content="without main metadata" IsChecked="{Binding FileBrowserOptions.FilterWithoutMetadata}"/>
+                        <CheckBox Content="without thumbnail" IsChecked="{Binding FileBrowserOptions.FilterWithoutThumbnail}"/>
+                        <CheckBox Content="without extra thumbnail" IsChecked="{Binding FileBrowserOptions.FilterWithoutFolderJpg}"/>
+                        <CheckBox Content="only first movie in a folder" IsChecked="{Binding FileBrowserOptions.FilterOnlyFirstMovieInFolder}"/>
+                    </StackPanel>
+                    <fluent:Button x:Name="Refresh" Text="Refresh" Click="Refresh_Click" LargeIcon="/images/refresh32.png" Margin="10 0 0 0">
+                        <fluent:Button.ToolTip>
+                            <fluent:ScreenTip Title="Refresh" Text="Makes visible in the file tree only the files matching the filter"/>
+                        </fluent:Button.ToolTip>
+                    </fluent:Button>
+                </fluent:RibbonGroupBox>
+
+                <fluent:RibbonGroupBox Header="Create sheets/thumbnails">
+                    <fluent:Button Text="Manual Mode" Click="Button_Click" Tag="Manual" LargeIcon="/images/manual32.png">
+                        <fluent:Button.ToolTip>
+                            <fluent:ScreenTip Title="Manual Mode" Text="Start in manual mode: user controlled processing"/>
+                        </fluent:Button.ToolTip>
+                    </fluent:Button>
+                    <fluent:Button Text="Semiautomatic Mode" Click="Button_Click" Tag="SemiAutomatic" LargeIcon="/images/semiauto32.png">
+                        <fluent:Button.ToolTip>
+                            <fluent:ScreenTip Title="Semiautomatic Mode" Text="Start in semiautomatic mode: similar with manual mode but default actions are executed on a timer basis"/>
+                        </fluent:Button.ToolTip>
+                    </fluent:Button>
+                    <fluent:Button Text="Automatic Mode" Click="Button_Click" Tag="Automatic" LargeIcon="/images/auto32.png" IsEnabled="True">
+                        <fluent:Button.ToolTip>
+                            <fluent:ScreenTip Title="Automatic Mode" Text="Start in automatic mode: you are prompted only to choose the movie when more matches are found"/>
+                        </fluent:Button.ToolTip>
+                    </fluent:Button>
+                    <fluent:Button Text="I'm Feeling Lucky Mode" Click="Button_Click" Tag="FeelingLucky" LargeIcon="/images/clover32.png" IsEnabled="True">
+                        <fluent:Button.ToolTip>
+                            <fluent:ScreenTip Title="I'm Feling Lucky Mode" Text="Start in &quot;I'm feeling lucky mode&quot;: absolutely no user interaction; the application is choosing best matches"/>
+                        </fluent:Button.ToolTip>
+                    </fluent:Button>
+                </fluent:RibbonGroupBox>
+                <fluent:RibbonGroupBox Header="Extra Features" >
+                    <fluent:Button Text="Create from Metadata" Click="UpdateMoviesheets_Click" LargeIcon="/images/metadata.gif" x:Name="UpdateMoviesheets">
+                        <fluent:Button.ToolTip>
+                            <fluent:ScreenTip Title="Create from Metadata" Text="Update (where metadata is available) existing moviesheets to use a different new template"/>
+                        </fluent:Button.ToolTip>
+                    </fluent:Button>
+                    <fluent:Button Text="Create Playlists" Click="CreatePlaylists_Click" LargeIcon="/images/playlist32.png">
+                        <fluent:Button.ToolTip>
+                            <fluent:ScreenTip Title="Create Playlists" Text="Create playlists based on your selected media files"/>
+                        </fluent:Button.ToolTip>
+                    </fluent:Button>
+                    <fluent:Button Text="Get Random Snapshots" Click="GetRandomSnapshotsMix_Click" LargeIcon="/images/dice32.png" x:Name="GetRandomSnapshotsMix" IsEnabled="{Binding IsMTNPathSpecified}">
+                        <fluent:Button.ToolTip>
+                            <fluent:ScreenTip Title="Get Random Snapshots" Text="Generate thumbnails from random snapshots"/>
+                        </fluent:Button.ToolTip>
+                    </fluent:Button>
+                    <fluent:Button Text=" Options " Click="Options_Click" LargeIcon="/images/options32.png">
+                        <fluent:Button.ToolTip>
+                            <fluent:ScreenTip Title="Options" Text="Customize ThumbGen's parameters"/>
+                        </fluent:Button.ToolTip>
+                    </fluent:Button>
+                </fluent:RibbonGroupBox>
+
+                <fluent:RibbonGroupBox Header="Back">
+                    <fluent:Button Text="Back to Main Page" Click="GoBack_Click" LargeIcon="/images/back32.png">
+                        <fluent:Button.ToolTip>
+                            <fluent:ScreenTip Title="Go Back to Main Page" Text="Discards selections and goes back to the main page"/>
+                        </fluent:Button.ToolTip>
+                    </fluent:Button>
+                </fluent:RibbonGroupBox>
+
+            </fluent:RibbonTabItem>
+            <fluent:RibbonTabItem Header="Fix for thumbnails via network shares (WDTV)" Name="KhedasFixPanel">
+                <fluent:RibbonGroupBox Header="Fix for shares" MinWidth="200">
+                    <fluent:Button Text="Apply Fix" Click="Button_Click_1" LargeIcon="/images/check32.png">
+                        <fluent:Button.ToolTip>
+                            <fluent:ScreenTip Title="Apply Fix" Text="Generates zzz.mp4 file for the selected folders and renames .jpg files to .jpg_tg"/>
+                        </fluent:Button.ToolTip>
+                    </fluent:Button>
+                    <fluent:Button Text="Remove Fix" Click="Button_Click_2" LargeIcon="/images/remove32.png">
+                        <fluent:Button.ToolTip>
+                            <fluent:ScreenTip Title="Remove Fix" Text="Removes zzz.mp4 file from the selected folders and renames back .jpg files from .jpg_tg"/>
+                        </fluent:Button.ToolTip>
+                    </fluent:Button>
+                </fluent:RibbonGroupBox>
+            </fluent:RibbonTabItem>
+            <fluent:RibbonTabItem Header="Generate dummy file (WDTV Hub?)" Name="GenDummyPanel">
+                <fluent:RibbonGroupBox Header="Generate the dummy file" MinWidth="200">
+                    <fluent:Button Text="Generate!" Click="GenerateDummyFile_Click" LargeIcon="/images/check32.png">
+                        <fluent:Button.ToolTip>
+                            <fluent:ScreenTip Title="Generate dummy file" Text="Generates a dummy file based on the settings from Options/Input-Output Naming"/>
+                        </fluent:Button.ToolTip>
+                    </fluent:Button>
+                </fluent:RibbonGroupBox>
+            </fluent:RibbonTabItem>
+        </fluent:Ribbon>
+        <!--Display the DirectoryTree on the left side of the grid-->
+        <Views:FileSystemTree Grid.Column="0" Grid.Row="1" x:Name="FileTree"
+                              Visibility="{Binding Path=ShowDirectoryTree, Converter={StaticResource BoolVisibilityConverter}}">
+        </Views:FileSystemTree>
+
+        <!-- pane splitter-->
+        <GridSplitter Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" Width="4" 
+                      Background="Gray" Visibility="{Binding Path=ShowDirectoryTree, Converter={StaticResource BoolVisibilityConverter}}" />
+
+        <!--Display the File and Directory Selector on the right side of the grid-->
+        <ScrollViewer Grid.Column="1" Grid.Row="1" x:Name="directoryViewerScroller" Loaded="ScrollViewer_Loaded">
+            <Views:DirectoryViewer x:Name="directoryViewer"></Views:DirectoryViewer>
+        </ScrollViewer>
+    </Grid>
+</fluent:RibbonWindow>

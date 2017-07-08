@@ -1,0 +1,119 @@
+﻿<UserControl x:Class="ThumbGen.MediaInfoControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+    xmlns:local="clr-namespace:ThumbGen"
+    x:Name="TheControl" DataContextChanged="TheControl_DataContextChanged">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="Bool2VisibConverter"/>
+    </UserControl.Resources>
+    <Grid DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}},Path=MediaData}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type Image}">
+                    <Setter Property="Width" Value="85"/>
+                    <Setter Property="Height" Value="58"/>
+                    <Setter Property="Margin" Value="5"/>
+                </Style>
+            </StackPanel.Resources>
+            <Image Source="{Binding Resolution.ImagePath}"/>
+            <Image Source="{Binding Format.ImagePath}"/>
+            <Image Source="{Binding Video.ImagePath}"/>
+            <Image Source="{Binding Audio.ImagePath}"/>
+            <Image Source="{Binding Subtitles.ImagePath}"/>
+        </StackPanel>
+        <Expander Grid.Row="1" Header="Edit media info (manually refresh sheet after modifying values here)" Margin="5" Focusable="False" FontWeight="Bold"
+                  Visibility="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}},Path=AllowEditing,Converter={StaticResource Bool2VisibConverter}}">
+            <Grid Grid.IsSharedSizeScope="True">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="One"/>
+                    <ColumnDefinition SharedSizeGroup="Two"/>
+                    <ColumnDefinition SharedSizeGroup="One"/>
+                    <ColumnDefinition SharedSizeGroup="Two"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="Margin" Value="5 0 0 0"/>
+                        <Setter Property="FontWeight" Value="Normal"/>
+                    </Style>
+                    <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="Margin" Value="0 0 0 0"/>
+                        <Setter Property="FontWeight" Value="Normal"/>
+                    </Style>
+                    <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                        <Setter Property="FontWeight" Value="Normal"/>
+                    </Style>
+                </Grid.Resources>
+                <TextBlock Grid.Column="0" Grid.Row="0" Text="Resolution:" Width="100" />
+                <ComboBox Grid.Column="1" Grid.Row="0" ItemsSource="{Binding Source={x:Static local:MediaModel.Resolutions}}" 
+                          SelectedValuePath="Key" SelectedValue="{Binding Resolution.Flag,Mode=TwoWay}" DisplayMemberPath="Value" Width="80"/>
+                
+                <TextBlock Grid.Column="2" Grid.Row="0" Text="Video Resolution:" Width="100" />
+                <TextBox Grid.Column="3" Grid.Row="0" Width="80" Text="{Binding VideoResolution,FallbackValue={x:Null}, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <TextBlock Grid.Column="0" Grid.Row="1" Text="Frame Rate (fps):" Width="100" />
+                <TextBox Grid.Column="1" Grid.Row="1" Width="80" Text="{Binding FrameRate,FallbackValue={x:Null}, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <TextBlock Grid.Column="2" Grid.Row="1" Text="Aspect Ratio:" Width="100" />
+                <TextBox Grid.Column="3" Grid.Row="1" Width="80" Text="{Binding AspectRatio,FallbackValue={x:Null}, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <TextBlock Grid.Column="0" Grid.Row="2" Text="Video:" Width="100" />
+                <ComboBox Grid.Column="1" Grid.Row="2" ItemsSource="{Binding Source={x:Static local:MediaModel.Videos}}" 
+                          SelectedValuePath="Key" SelectedValue="{Binding Video.Flag,Mode=TwoWay}" DisplayMemberPath="Value" Width="80"/>
+
+                <TextBlock Grid.Column="2" Grid.Row="2" Text="Audio:" Width="100" />
+                <ComboBox Grid.Column="3" Grid.Row="2" ItemsSource="{Binding Source={x:Static local:MediaModel.Audios}}" 
+                          SelectedValuePath="Key" SelectedValue="{Binding Audio.Flag,Mode=TwoWay}" DisplayMemberPath="Value" Width="80"/>
+
+                <TextBlock Grid.Column="0" Grid.Row="3" Text="File size (bytes):" Width="100" />
+                <TextBox Grid.Column="1" Grid.Row="3" Width="80" Text="{Binding FileSizeBytes,FallbackValue={x:Null}, UpdateSourceTrigger=PropertyChanged}"/>
+                
+                <TextBlock Grid.Column="2" Grid.Row="3" Text="Duration (sec):" Width="100" />
+                <TextBox Grid.Column="3" Grid.Row="3" Width="80" Text="{Binding DurationSeconds,FallbackValue={x:Null}, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <TextBlock Grid.Column="0" Grid.Row="4" Text="Video Bitrate (Kbps):" Width="110" />
+                <TextBox Grid.Column="1" Grid.Row="4" Width="80" Text="{Binding VideoBitrate,FallbackValue={x:Null}, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <TextBlock Grid.Column="2" Grid.Row="4" Text="Audio Bitrate (Kbps):" Width="110" />
+                <TextBox Grid.Column="3" Grid.Row="4" Width="80" Text="{Binding AudioBitrate,FallbackValue={x:Null}, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <TextBlock Grid.Column="0" Grid.Row="5" Text="Container Format:" Width="100" />
+                <TextBox Grid.Column="1" Grid.Row="5" Width="80" Text="{Binding ContainerFormat,FallbackValue={x:Null}, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <TextBlock Grid.Column="2" Grid.Row="5" Text="Audio Channels:" Width="100" />
+                <TextBox Grid.Column="3" Grid.Row="5" Width="80" Text="{Binding AudioChannels,FallbackValue={x:Null}, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <TextBlock Grid.Column="0" Grid.Row="6" Text="Language Code:" Width="100" />
+                <TextBox Grid.Column="1" Grid.Row="6" Width="80" Text="{Binding LanguageCode,FallbackValue={x:Null}, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <TextBlock Grid.Column="2" Grid.Row="6" Text="Language:" Width="100" />
+                <TextBox Grid.Column="3" Grid.Row="6" Width="80" Text="{Binding Language,FallbackValue={x:Null}, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <TextBlock Grid.Column="0" Grid.Row="7" Text="Format:" Width="100" />
+                <ComboBox Grid.Column="1" Grid.Row="7" ItemsSource="{Binding Source={x:Static local:MediaModel.Formats}}" 
+                          SelectedValuePath="Key" SelectedValue="{Binding Format.Flag,Mode=TwoWay}" DisplayMemberPath="Value" Width="80"/>                
+                
+                <Button x:Name="Reset" Grid.Column="2" Grid.Row="7" Grid.ColumnSpan="2" Content="Reset to detected values" Click="Reset_Click"/>
+            </Grid>
+        </Expander>
+        <TextBox Grid.Row="2" IsReadOnly="True" FontFamily="Courier New" FontSize="11"
+                 Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}},Path=TextContent}"/>
+    </Grid>
+</UserControl>

@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="ThumbGen.OptionsButton"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:ThumbGen">
+    <Button x:Name="AdvancedOptionsButton" HorizontalAlignment="Left" Click="AdvancedOptionsButton_Click"
+            MinWidth="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=MinWidth}"
+            MinHeight="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=MinHeight}"
+            Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=ActualWidth, Mode=OneWay}"
+            Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=ActualHeight, Mode=OneWay}"
+            ToolTip="Show program options">
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <Image Source="/Images/options.png" VerticalAlignment="Center" Width="16" Height="16"/>
+            <TextBlock Margin="3 0 0 0" Text="Options..." VerticalAlignment="Center"/>
+        </StackPanel>
+    </Button>
+</UserControl>
